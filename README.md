@@ -11,7 +11,8 @@ Este repositorio será usado por los integrantes del grupo a lo largo del cursad
 
 - [Márquez, Juan Francisco - 89074](https://github.com/juanfmarquez)
 - [Dávila Pellegrino, Eliseo Francisco - 86694](https://github.com/eliseodavila)
-- [Roldán, Juan Pedro - 90318](https://github.com/juanro03).
+- [Roldán, Juan Pedro - 90318](https://github.com/juanro03)
+- [Taliani, Juan Ignacio - 86103](https://github.com/JuanIgnacioTaliani)
 
 
 
@@ -22,24 +23,25 @@ Este repositorio será usado por los integrantes del grupo a lo largo del cursad
 
 ```
 ISW_2024_4K2_G?
-├── Material Estudio
-│   ├── Bibliografía
-│   │   ├── ISW_BB_<NombreDelDocumento>.pdf
+├── MaterialEstudio
+│   ├── Bibliografia
+│   │   ├── BB_<NombreDelDocumento>.pdf
 │   ├── Notas de Clase
-│   │   ├── ISW_NT_<NúmeroSemana>_<Nombre_Apellido>.pdf
+│   │   ├── NT_<NúmeroDeSemana>_<Nombre_Apellido>.pdf
 │   ├── Presentaciones
-|   |   ├── Resúmenes
-|   |   |   ├── ISW_RES_U<NúmeroDeUnidad>.pdf
-│   │   ├── ISW_PPT_U<NúmeroDeUnidad>_<Tema>.pdf
-├── Programa
-│   ├── ISW_ProgramaAsignatura_2024.pdf  
+│   │   ├── PPT_U<NúmeroDeUnidad>_<Tema>.pdf
+|   ├── Resumenes
+|   |   ├── RES_U<NúmeroDeUnidad>.pdf
+├── Academico
+│   ├── ISW_Programa_2024.pdf
+│   ├── ISW_Cronograma_2024.xlsx
 ├── Templates
-│   ├── ISW_Template_<NombreDelTema>.[docx|xlsx]
+│   ├── Template_<NombreDelTema>.[docx|xlsx]
 ├── Trabajos
-│   ├── Trabajos Conceptuales
-│   │   ├── ISW_TC_<NúmeroDeTC>_<Título>.pdf
-│   ├── Trabajos Prácticos
-│   │   ├── ISW_TP_<NúmeroDeTP>_<Título>.[pdf|xslx]
+│   ├── Conceptuales
+│   │   ├── TC_<NúmeroDeTC>_<Título>.pdf
+│   ├── Practicos
+│   │   ├── TP_<NúmeroDeTP>_<Título>.pdf
 
 
 ```
@@ -48,23 +50,17 @@ ISW_2024_4K2_G?
 
 ## Ítems de Configuración y Reglas de Nombrado
 
-| ítem                | Regla de Nombrado                       | Ubicación |
-| ------------------- | ---------------------------------------- | ------------- |
-| Programa de Asignatura | ISW_ProgramaAsignatura_2024.pdf          | ISW_2024_4K2_G?\Programa\    |
-| Trabajos Prácticos | ISW_TP_<NúmeroDeTP>_<Título>.[pdf/xslx]                | ISW_2024_4K2_G?\Trabajos\Trabajos Prácticos\    |
-| Trabajos Conceptuales | ISW_TC_<NúmeroDeTC>_<Título>.pdf              | ISW_2024_4K2_G?\Trabajos\Trabajos Conceptuales\    |
-| Templates           | ISW_Template_<NombreDelTema>.[docx/xslx] | ISW_2024_4K2_G?\Templates\    |
-| Presentaciones      | ISW_PPT_U<NúmeroDeUnidad>_<Tema>.pdf | ISW_2024_4K2_G?\Material Estudio\Presentaciones\    |
-| Resúmenes           | ISW_RES_U<NúmeroDeUnidad>.pdf         | ISW_2024_4K2_G?\Material Estudio\Resúmenes\    |
-| Bibliografía        | ISW_BB_<NombreDelDocumento>.pdf       | ISW_2024_4K2_G?\Material Estudio\Bibliografía\    |
-| Notas de Clase      | ISW_NT_<NúmeroSemana>_<Nombre_Apellido>.pdf | ISW_2024_4K2_G?\Material Estudio\Notas de Clase\ |
-
-
-
-
-## Criterio de establecimiento de Lineas Base
-
-Dentro de nuestro repositorio el criterio para establecer una Línea Base sin contar la primera que será al momento de crear dicho repositorio con los primeros Ítems de Configuración , será al finalizar y aprobar cada Trabajo Práctico o Conceptual.
+| ítem                        | Regla de Nombrado                         | Ubicación |
+| --------------------------- | ----------------------------------------- | ------------- |
+| Programa de la asignatura   | ISW_Programa_2024.pdf                     | ISW_2024_4K2_G?\Academico\    |
+| Cronograma de la asignatura | ISW_Cronograma_2024.xlsx                  | ISW_2024_4K2_G?\Academico\    |
+| Trabajos Prácticos          | TP_<NúmeroDeTP>_<Título>.pdf              | ISW_2024_4K2_G?\Trabajos\Practicos\    |
+| Trabajos Conceptuales       | TC_<NúmeroDeTC>_<Título>.pdf              | ISW_2024_4K2_G?\Trabajos\Conceptuales\    |
+| Templates                   | Template_<NombreDelTema>.[docx/xslx]      | ISW_2024_4K2_G?\Templates\    |
+| Presentaciones              | PPT_U<NúmeroDeUnidad>_<Tema>.pdf          | ISW_2024_4K2_G?\Material Estudio\Presentaciones\    |
+| Resúmenes                   | RES_U<NúmeroDeUnidad>.pdf                 | ISW_2024_4K2_G?\Material Estudio\Resúmenes\    |
+| Bibliografía                | BB_<NombreDelDocumento>.pdf               | ISW_2024_4K2_G?\Material Estudio\Bibliografía\    |
+| Notas de Clase              | NT_<NúmeroDeSemana>_<Nombre_Apellido>.pdf | ISW_2024_4K2_G?\Material Estudio\Notas de Clase\ |
 
 
 
@@ -73,7 +69,7 @@ Dentro de nuestro repositorio el criterio para establecer una Línea Base sin co
 | Acrónimo                | Significado                       
 | ------------------- | ---------------------------------------- |
 | **ISW** | Ingeniería y Calidad de Software |
-| **G4** | Grupo número 4 |
+| **G4** | Grupo Número ? |
 | **TP** | Trabajo Práctico |
 | **TC** | Trabajo Conceptual | 
 | **PPT** | Presentaciones | 
@@ -83,9 +79,16 @@ Dentro de nuestro repositorio el criterio para establecer una Línea Base sin co
 | **SCM** | Gestión de Configuración del Software | 
 | **U** | Unidad | 
 | **<Título>** | Título del Trabajo Conceptual o Práctico | 
-| **<NombreDelTema>** | Nombre asociado al tema al que corresponde el template. | 
-| **<NúmeroDeUnidad>** | Número de la Unidad correspondiente al Tema del documento o archivo, siguiendo los número establecidos en el programa de la asignatura. |
-| **<Tema>** | Título del tema al que corresponde una presentación o diapositiva. | 
+| **<NombreDelTema>** | Nombre asociado al Tema al que corresponde el Template | 
+| **<NúmeroDeUnidad>** | Número de la Unidad correspondiente al Tema del documento o archivo, siguiendo los número establecidos en el Programa de la asignatura. |
+| **<Tema>** | Título del tema al que corresponde una Presentación o Diapositiva. | 
 | **<NombreDelDocumento>** | Título del archivo correspondiente a un libro, paper, o documento de Bibliografía. | 
-| **<NúmeroSemana>** | Número de la semana a la que corresponde un Ítem de Configuración de notas de clase, según el cronograma de la materia en el año 2024. |
-| **<Nombre_Apellido>** | Nombre y apellido del autor de un ítem de Configuración de notas de clase. |
+| **<NúmeroSemana>** | Número de la semana a la que corresponde un Ítem de Configuración de Notas de Clase, según el Cronograma de la materia en el año 2024. |
+| **<Nombre_Apellido>** | Nombre y apellido del autor de un Ítem de Configuración de Notas de Clase. |
+
+
+
+
+## Criterio de establecimiento de Lineas Base
+
+Dentro de nuestro repositorio el criterio para establecer una Línea Base sin contar la primera que será al momento de crear dicho repositorio con los primeros Ítems de Configuración , será al finalizar y aprobar cada Trabajo Práctico o Conceptual.
