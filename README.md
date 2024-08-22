@@ -19,7 +19,7 @@ Este repositorio será usado por los integrantes del grupo a lo largo del cursad
 
 
 ```
-ISW_2024_4K4_G4
+ISW_2024_4K2_G?
 ├── Material Estudio
 │   ├── Bibliografía
 │   │   ├── ISW_BB_<NombreDelDocumento>.pdf
@@ -48,14 +48,14 @@ ISW_2024_4K4_G4
 
 | ítem                | Regla de Nombrado                       | Ubicación |
 | ------------------- | ---------------------------------------- | ------------- |
-| Programa de Asignatura | ISW_ProgramaAsignatura_2024.pdf          | ISW_2024_4K2_G4\Programa\    |
-| Trabajos Prácticos | ISW_TP_<NúmeroDeTP>_<Título>.[pdf/xslx]                | ISW_2024_4K2_G4\Trabajos\Trabajos Prácticos\    |
-| Trabajos Conceptuales | ISW_TC_<NúmeroDeTC>_<Título>.pdf              | ISW_2024_4K2_G4\Trabajos\Trabajos Conceptuales\    |
-| Templates           | ISW_Template_<NombreDelTema>.[docx/xslx] | ISW_2024_4K2_G4\Templates\    |
-| Presentaciones      | ISW_PPT_U<NúmeroDeUnidad>_<Tema>.pdf | ISW_2024_4K2_G4\Material Estudio\Presentaciones\    |
-| Resúmenes           | ISW_RES_U<NúmeroDeUnidad>.pdf         | ISW_2024_4K2_G4\Material Estudio\Resúmenes\    |
-| Bibliografía        | ISW_BB_<NombreDelDocumento>.pdf       | ISW_2024_4K2_G4\Material Estudio\Bibliografía\    |
-| Notas de Clase      | ISW_NT_<NúmeroSemana>_<Nombre_Apellido>.pdf | ISW_2024_4K2_G4\Material Estudio\Notas de Clase\ |
+| Programa de Asignatura | ISW_ProgramaAsignatura_2024.pdf          | ISW_2024_4K2_G?\Programa\    |
+| Trabajos Prácticos | ISW_TP_<NúmeroDeTP>_<Título>.[pdf/xslx]                | ISW_2024_4K2_G?\Trabajos\Trabajos Prácticos\    |
+| Trabajos Conceptuales | ISW_TC_<NúmeroDeTC>_<Título>.pdf              | ISW_2024_4K2_G?\Trabajos\Trabajos Conceptuales\    |
+| Templates           | ISW_Template_<NombreDelTema>.[docx/xslx] | ISW_2024_4K2_G?\Templates\    |
+| Presentaciones      | ISW_PPT_U<NúmeroDeUnidad>_<Tema>.pdf | ISW_2024_4K2_G?\Material Estudio\Presentaciones\    |
+| Resúmenes           | ISW_RES_U<NúmeroDeUnidad>.pdf         | ISW_2024_4K2_G?\Material Estudio\Resúmenes\    |
+| Bibliografía        | ISW_BB_<NombreDelDocumento>.pdf       | ISW_2024_4K2_G?\Material Estudio\Bibliografía\    |
+| Notas de Clase      | ISW_NT_<NúmeroSemana>_<Nombre_Apellido>.pdf | ISW_2024_4K2_G?\Material Estudio\Notas de Clase\ |
 
 
 
