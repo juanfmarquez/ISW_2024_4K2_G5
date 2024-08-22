@@ -13,6 +13,7 @@ Este repositorio será usado por los integrantes del grupo a lo largo del cursad
 - [Dávila Pellegrino, Eliseo Francisco - 86694](https://github.com/eliseodavila)
 - [Roldán, Juan Pedro - 90318](https://github.com/juanro03)
 - [Taliani, Juan Ignacio - 86103](https://github.com/JuanIgnacioTaliani)
+- [Avendaño, Santiago Roberto - 90618](https://github.com/Santi-Avendano)
 
 
 
