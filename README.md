@@ -10,6 +10,8 @@ Este repositorio será usado por los integrantes del grupo a lo largo del cursad
 
 - 
 - [Márquez, Juan Francisco - 89074](https://github.com/juanfmarquez)
+- [Dávila Pellegrino, Eliseo Francisco - 86694](https://github.com/eliseodavila)
+
 
 
 
