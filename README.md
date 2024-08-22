@@ -8,10 +8,10 @@ Este repositorio será usado por los integrantes del grupo a lo largo del cursad
 ## Integrantes del grupo
 
 
-- 
+
 - [Márquez, Juan Francisco - 89074](https://github.com/juanfmarquez)
 - [Dávila Pellegrino, Eliseo Francisco - 86694](https://github.com/eliseodavila)
-
+- [Roldán, Juan Pedro - 90318](https://github.com/juanro03).
 
 
 
