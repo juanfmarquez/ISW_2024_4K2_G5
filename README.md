@@ -14,6 +14,8 @@ Este repositorio será usado por los integrantes del grupo a lo largo del cursad
 - [Roldán, Juan Pedro - 90318](https://github.com/juanro03)
 - [Taliani, Juan Ignacio - 86103](https://github.com/JuanIgnacioTaliani)
 - [Avendaño, Santiago Roberto - 90618](https://github.com/Santi-Avendano)
+- [Malamud, Tomás Andrés - 89772](https://github.com/TomiMalamud)
+- [Boris, Martín Nicolás - 90236](https://github.com/Mart2202)
 
 
 
