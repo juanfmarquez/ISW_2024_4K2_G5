@@ -35,7 +35,7 @@ ISW_2024_4K2_G5
 │   │   ├── PPT_U<NúmeroDeUnidad>_<Tema>.pdf
 |   ├── Resumenes
 |   |   ├── RES_U<NúmeroDeUnidad>.pdf
-├── Academico
+├── Programa
 │   ├── ISW_Programa_2024.pdf
 │   ├── ISW_Cronograma_2024.xlsx
 ├── Templates
