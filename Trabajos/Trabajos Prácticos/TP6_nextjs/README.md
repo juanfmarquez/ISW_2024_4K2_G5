@@ -18,3 +18,6 @@ npm run dev
 ```
 
 Abrí [http://localhost:3000](http://localhost:3000) y listo
+
+> [!NOTE]  
+> Al abrirlo, usar el modo responsive. El TP indica que se debe diseñar una app mobile, así que el diseño está optimizado para eso. En Chrome hay que ir a Inspeccionar Elemento y después hacer click en el ícono de la esquina superior izquierda de la interfaz que se abre.
