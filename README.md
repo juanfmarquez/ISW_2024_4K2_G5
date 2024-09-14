@@ -55,8 +55,8 @@ ISW_2024_4K2_G5
 
 | ítem                        | Regla de Nombrado                         | Ubicación |
 | --------------------------- | ----------------------------------------- | ------------- |
-| Programa de la asignatura   | ISW_Programa_2024.pdf                     | ISW_2024_4K2_G5\Academico\    |
-| Cronograma de la asignatura | ISW_Cronograma_2024.xlsx                  | ISW_2024_4K2_G5\Academico\    |
+| Programa de la asignatura   | ISW_Programa_2024.pdf                     | ISW_2024_4K2_G5\Programa\    |
+| Cronograma de la asignatura | ISW_Cronograma_2024.xlsx                  | ISW_2024_4K2_G5\Programa\    |
 | Trabajos Prácticos          | TP_<NúmeroDeTP>_<Título>.pdf              | ISW_2024_4K2_G5\Trabajos\Practicos\    |
 | Trabajos Conceptuales       | TC_<NúmeroDeTC>_<Título>.pdf              | ISW_2024_4K2_G5\Trabajos\Conceptuales\    |
 | Templates                   | Template_<NombreDelTema>.[docx/xslx]      | ISW_2024_4K2_G5\Templates\    |
