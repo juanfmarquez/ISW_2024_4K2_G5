@@ -62,12 +62,6 @@ const PaymentSelection = () => {
       let formattedValue = value.replace(/\D/g, '');
       if (formattedValue.length > 2) {
           const month = parseInt(formattedValue.slice(0, 2), 10);
-          if (month > 12 || month < 1) {
-              setError('El mes debe estar entre 01 y 12');
-              return;
-          } else {
-              setError('');
-          }
       }
       if (value.length === 3 && e.nativeEvent.inputType === 'deleteContentBackward') {
         // Permitir borrar el slash manualmente
@@ -133,11 +127,11 @@ const PaymentSelection = () => {
       const currentYear = currentDate.getFullYear() % 100;
 
       if (month < 1 || month > 12){
-        setError("El mes "+month+" no es válido. Ingresá un valor del 1 al 12.");
+        setError("Fecha inválida");
         return false;
       }
       if (year < currentYear || (year == currentYear && month < currentMonth)){
-        setError("Su tarjeta está vencida.");
+        setError("Su tarjeta está vencida");
         return false;
       }
      }
