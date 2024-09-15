@@ -126,6 +126,23 @@ const PaymentSelection = () => {
       return false;
     }
 
+    if (/^\d{2}\/\d{2}$/.test(expiry)){
+      const [month, year] = expiry.split('/').map(Number);
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth() + 1;
+      const currentYear = currentDate.getFullYear() % 100;
+
+      if (month < 1 || month > 12){
+        setError("El mes "+month+" no es válido. Ingresá un valor del 1 al 12.");
+        return false;
+      }
+      if (year < currentYear || (year == currentYear && month < currentMonth)){
+        setError("Su tarjeta está vencida.");
+        return false;
+      }
+     }
+
+
     return true;
   };
 
@@ -153,6 +170,10 @@ const PaymentSelection = () => {
 
   return (
     <div>
+      <Button onClick={() => router.push('/quotes')} className="mb-4">
+        Volver a los presupuestos
+      </Button>
+
       <h2 className="text-2xl font-bold my-4">Elegí cómo pagar</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
         {paymentMethods.map((method) => (
