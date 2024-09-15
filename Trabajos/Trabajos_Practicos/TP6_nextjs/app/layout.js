@@ -2,7 +2,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { ChevronLeft } from "lucide-react";
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 const geistSans = localFont({
@@ -18,7 +18,13 @@ const geistMono = localFont({
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
+  const router = useRouter();
   const isMainPage = pathname === '/';
+
+  const handleBackClick = (e) => {
+    e.preventDefault();
+    router.back();
+  }
 
   return (
     <html lang="es">
@@ -27,9 +33,9 @@ export default function RootLayout({ children }) {
       >
           {!isMainPage && (
         <header className="border px-4 h-10 flex items-center">
-            <Link href="/" className="mr-4">
+            <button onClick={handleBackClick} className="mr-4">
               <ChevronLeft className="hover:text-gray-600 transition-colors"/>
-            </Link>
+            </button>
           <p className="">Tango</p>
         </header>
           )}

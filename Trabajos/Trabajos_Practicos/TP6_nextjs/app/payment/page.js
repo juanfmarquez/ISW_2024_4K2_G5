@@ -170,9 +170,6 @@ const PaymentSelection = () => {
 
   return (
     <div>
-      <Button onClick={() => router.push('/quotes')} className="mb-4">
-        Volver a los presupuestos
-      </Button>
 
       <h2 className="text-2xl font-bold my-4">Elegí cómo pagar</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
