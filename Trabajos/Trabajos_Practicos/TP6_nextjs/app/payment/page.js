@@ -39,29 +39,85 @@ const PaymentSelection = () => {
   };
 
   const handleCardDetailChange = (e) => {
-    setCardDetails({ ...cardDetails, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    // Validación del número de tarjeta (solo números)
+    if (name === 'number') {
+      if (/^[0-9]*$/.test(value)) {
+        setCardDetails({ ...cardDetails, [name]: value });
+      }
+    }
+    // Validación del nombre del titular (solo letras)
+    else if (name === 'name') {
+      if (/^[a-zA-Z\s]*$/.test(value)) {
+        setCardDetails({ ...cardDetails, [name]: value });
+      }
+    }
+    // Validación de fecha de expiración (solo números y formato MM/AA)
+    else if (name === 'expiry') {
+      if (/^\d{0,2}(\/\d{0,2})?$/.test(value)) {
+        setCardDetails({ ...cardDetails, [name]: value });
+      }
+    }
+    // Validación del CVV (solo números)
+    else if (name === 'cvv') {
+      if (/^[0-9]{0,3}$/.test(value)) {
+        setCardDetails({ ...cardDetails, [name]: value });
+      }
+    }
+    // Validación del número de documento (solo números)
+    else if (name === 'documentNumber') {
+      if (/^[0-9]*$/.test(value)) {
+        setCardDetails({ ...cardDetails, [name]: value });
+      }
+    }
+
     setError("");
   };
 
   const validateCardDetails = () => {
-    return Object.values(cardDetails).every(value => value.trim() !== "");
+    const { number, cvv } = cardDetails;
+    
+    // Validar que no haya campos vacíos
+    if (!Object.values(cardDetails).every(value => value.trim() !== "")) {
+      setError("Por favor, completa todos los detalles de la tarjeta.");
+      return false;
+    }
+
+    // Validación de número de tarjeta (15 dígitos)
+    if (number && number.replace(/\s+/g, '').length !== 15) {
+      setError("El número de la tarjeta debe tener 15 dígitos.");
+      return false;
+    }
+
+    // Validación del CVV (3 dígitos)
+    if (cvv && cvv.length !== 3) {
+      setError("El CVV debe tener 3 dígitos.");
+      return false;
+    }
+
+    return true;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!selectedPaymentMethod) {
       setError("Elegí un método de pago tocando una opción.");
       return;
     }
+
     if (selectedPaymentMethod.id === 'card' && !validateCardDetails()) {
-      setError("Por favor, completa todos los detalles de la tarjeta.");
       return;
     }
+
     // Process payment logic here
     console.log("Payment method:", selectedPaymentMethod);
     if (selectedPaymentMethod.id === 'card') {
       console.log("Card details:", cardDetails);
     }
+    
+    // Si todo está correcto
     alert("Tu pago se realizó correctamente. ¡Muchas gracias!");
   };
 
@@ -97,9 +153,10 @@ const PaymentSelection = () => {
               name="number"
               placeholder="Número de tarjeta"
               autoComplete="cc-number"
-              pattern="[0-9\s]{13,19}"
-              maxLength="19"
+              pattern="[0-9\s]{15}"
+              maxLength="15"
               onChange={handleCardDetailChange}
+              value={cardDetails.number}
               required
             />
             <Input
@@ -107,7 +164,9 @@ const PaymentSelection = () => {
               name="name"
               placeholder="Titular de la tarjeta"
               autoComplete="cc-name"
+              maxLength="50"
               onChange={handleCardDetailChange}
+              value={cardDetails.name}
               required
             />
             <div className="flex gap-2">
@@ -119,6 +178,7 @@ const PaymentSelection = () => {
                 pattern="(0[1-9]|1[0-2])\/[0-9]{2}"
                 maxLength="5"
                 onChange={handleCardDetailChange}
+                value={cardDetails.expiry}
                 required
               />
               <Input
@@ -126,9 +186,10 @@ const PaymentSelection = () => {
                 name="cvv"
                 placeholder="CVV"
                 autoComplete="cc-csc"
-                pattern="[0-9]{3,4}"
-                maxLength="4"
+                pattern="[0-9]{3}"
+                maxLength="3"
                 onChange={handleCardDetailChange}
+                value={cardDetails.cvv}
                 required
               />
             </div>
@@ -136,7 +197,9 @@ const PaymentSelection = () => {
               type="text"
               name="documentNumber"
               placeholder="Documento del titular"
+              maxLength="15"
               onChange={handleCardDetailChange}
+              value={cardDetails.documentNumber}
               required
             />
           </div>
