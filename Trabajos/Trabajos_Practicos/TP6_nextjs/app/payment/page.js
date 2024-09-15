@@ -41,30 +41,54 @@ const PaymentSelection = () => {
   const handleCardDetailChange = (e) => {
     const { name, value } = e.target;
 
-    // Validación del número de tarjeta (solo números)
+    // Validación del número de tarjeta (solo números y formateo con espacios)
     if (name === 'number') {
-      if (/^[0-9]*$/.test(value)) {
-        setCardDetails({ ...cardDetails, [name]: value });
+      let formattedValue = value.replace(/\D/g, '');
+      if (formattedValue.length > 0) {
+          formattedValue = formattedValue.match(/.{1,4}/g).join(' ');
       }
+      setCardDetails({ ...cardDetails, [name]: formattedValue });
     }
+
     // Validación del nombre del titular (solo letras)
     else if (name === 'name') {
       if (/^[a-zA-Z\s]*$/.test(value)) {
         setCardDetails({ ...cardDetails, [name]: value });
       }
     }
+
     // Validación de fecha de expiración (solo números y formato MM/AA)
     else if (name === 'expiry') {
-      if (/^\d{0,2}(\/\d{0,2})?$/.test(value)) {
-        setCardDetails({ ...cardDetails, [name]: value });
+      let formattedValue = value.replace(/\D/g, '');
+      if (formattedValue.length > 2) {
+          const month = parseInt(formattedValue.slice(0, 2), 10);
+          if (month > 12 || month < 1) {
+              setError('El mes debe estar entre 01 y 12');
+              return;
+          } else {
+              setError('');
+          }
+      }
+      if (value.length === 3 && e.nativeEvent.inputType === 'deleteContentBackward') {
+        // Permitir borrar el slash manualmente
+        formattedValue = formattedValue.slice(0, 2);
+      } else if (formattedValue.length > 2) {
+          // Asegurarse de que el tercer carácter sea "/"
+          formattedValue = formattedValue.slice(0, 2) + '/' + formattedValue.slice(2);
+      }
+      // Limitar el número total de caracteres a 5 (MM/AA)
+      if (formattedValue.length <= 5) {
+          setCardDetails({ ...cardDetails, [name]: formattedValue });
       }
     }
+
     // Validación del CVV (solo números)
     else if (name === 'cvv') {
       if (/^[0-9]{0,3}$/.test(value)) {
         setCardDetails({ ...cardDetails, [name]: value });
       }
     }
+
     // Validación del número de documento (solo números)
     else if (name === 'documentNumber') {
       if (/^[0-9]*$/.test(value)) {
@@ -76,7 +100,7 @@ const PaymentSelection = () => {
   };
 
   const validateCardDetails = () => {
-    const { number, cvv } = cardDetails;
+    const { number, cvv, expiry } = cardDetails;
     
     // Validar que no haya campos vacíos
     if (!Object.values(cardDetails).every(value => value.trim() !== "")) {
@@ -84,15 +108,21 @@ const PaymentSelection = () => {
       return false;
     }
 
-    // Validación de número de tarjeta (15 dígitos)
-    if (number && number.replace(/\s+/g, '').length !== 15) {
-      setError("El número de la tarjeta debe tener 15 dígitos.");
+    // Validación de número de tarjeta (16 dígitos)
+    if (number && number.replace(/\s+/g, '').length !== 16) {
+      setError("El número de la tarjeta debe tener 16 dígitos.");
       return false;
     }
 
     // Validación del CVV (3 dígitos)
     if (cvv && cvv.length !== 3) {
       setError("El CVV debe tener 3 dígitos.");
+      return false;
+    }
+
+    // Validación de fecha de expiración (5 caracteres en formato MM/AA)
+    if (expiry && expiry.length !== 5) {
+      setError("La fecha de expiración debe cumplir el formato MM/AA");
       return false;
     }
 
@@ -153,8 +183,8 @@ const PaymentSelection = () => {
               name="number"
               placeholder="Número de tarjeta"
               autoComplete="cc-number"
-              pattern="[0-9\s]{15}"
-              maxLength="15"
+              pattern="[0-9\s]{1, 19}"
+              maxLength="19"
               onChange={handleCardDetailChange}
               value={cardDetails.number}
               required
