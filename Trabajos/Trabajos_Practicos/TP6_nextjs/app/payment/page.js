@@ -1,10 +1,11 @@
-'use client';
+'use client'
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronRight, CreditCard, DollarSign } from "lucide-react";
+import Image from 'next/image';
 
 const PaymentSelection = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
@@ -16,9 +17,6 @@ const PaymentSelection = () => {
     documentNumber: ""
   });
   const [error, setError] = useState("");
-  const [attempts, setAttempts] = useState(0);
-  const [isPaymentProcessed, setIsPaymentProcessed] = useState(false);
-  const [selectedCardType, setSelectedCardType] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
   const quoteId = searchParams.get('quoteId');
@@ -30,9 +28,9 @@ const PaymentSelection = () => {
   }, [quoteId, router]);
 
   const paymentMethods = [
-    { id: 'cash_pickup', name: 'Contado al retirar', icon: <DollarSign /> },
-    { id: 'cash_delivery', name: 'Contado contra entrega', icon: <DollarSign /> },
-    { id: 'card', name: 'Tarjeta de crédito/débito', icon: <CreditCard /> },
+    { id: 1, name: 'Contado al retirar', icon: <DollarSign /> },
+    { id: 2, name: 'Contado contra entrega', icon: <DollarSign /> },
+    { id: 3, name: 'Tarjeta de crédito/débito', icon: <CreditCard /> },
   ];
 
   const handlePaymentMethodSelection = (method) => {
@@ -43,85 +41,102 @@ const PaymentSelection = () => {
   const handleCardDetailChange = (e) => {
     const { name, value } = e.target;
 
+    // Validación del número de tarjeta (solo números y formateo con espacios)
     if (name === 'number') {
       let formattedValue = value.replace(/\D/g, '');
       if (formattedValue.length > 0) {
-        formattedValue = formattedValue.match(/.{1,4}/g).join(' ');
+          formattedValue = formattedValue.match(/.{1,4}/g).join(' ');
       }
       setCardDetails({ ...cardDetails, [name]: formattedValue });
-    } else if (name === 'name') {
+    }
+
+    // Validación del nombre del titular (solo letras)
+    else if (name === 'name') {
       if (/^[a-zA-Z\s]*$/.test(value)) {
         setCardDetails({ ...cardDetails, [name]: value });
       }
-    } else if (name === 'expiry') {
+    }
+
+    // Validación de fecha de expiración (solo números y formato MM/AA)
+    else if (name === 'expiry') {
       let formattedValue = value.replace(/\D/g, '');
       if (formattedValue.length > 2) {
-        formattedValue = formattedValue.slice(0, 2) + '/' + formattedValue.slice(2);
+          const month = parseInt(formattedValue.slice(0, 2), 10);
       }
+      if (value.length === 3 && e.nativeEvent.inputType === 'deleteContentBackward') {
+        // Permitir borrar el slash manualmente
+        formattedValue = formattedValue.slice(0, 2);
+      } else if (formattedValue.length > 2) {
+          // Asegurarse de que el tercer carácter sea "/"
+          formattedValue = formattedValue.slice(0, 2) + '/' + formattedValue.slice(2);
+      }
+      // Limitar el número total de caracteres a 5 (MM/AA)
       if (formattedValue.length <= 5) {
-        setCardDetails({ ...cardDetails, [name]: formattedValue });
+          setCardDetails({ ...cardDetails, [name]: formattedValue });
       }
-    } else if (name === 'cvv') {
+    }
+
+    // Validación del CVV (solo números)
+    else if (name === 'cvv') {
       if (/^[0-9]{0,3}$/.test(value)) {
         setCardDetails({ ...cardDetails, [name]: value });
       }
-    } else if (name === 'documentNumber') {
+    }
+
+    // Validación del número de documento (solo números)
+    else if (name === 'documentNumber') {
       if (/^[0-9]*$/.test(value)) {
         setCardDetails({ ...cardDetails, [name]: value });
       }
     }
+
     setError("");
   };
 
   const validateCardDetails = () => {
     const { number, cvv, expiry } = cardDetails;
+    
+    // Validar que no haya campos vacíos
     if (!Object.values(cardDetails).every(value => value.trim() !== "")) {
       setError("Por favor, completa todos los detalles de la tarjeta.");
       return false;
     }
 
-    if (number.replace(/\s+/g, '').length !== 16) {
+    // Validación de número de tarjeta (16 dígitos)
+    if (number && number.replace(/\s+/g, '').length !== 16) {
       setError("El número de la tarjeta debe tener 16 dígitos.");
       return false;
     }
 
-    if (cvv.length !== 3) {
+    // Validación del CVV (3 dígitos)
+    if (cvv && cvv.length !== 3) {
       setError("El CVV debe tener 3 dígitos.");
       return false;
     }
 
-    if (expiry.length !== 5) {
+    // Validación de fecha de expiración (5 caracteres en formato MM/AA)
+    if (expiry && expiry.length !== 5) {
       setError("La fecha de expiración debe cumplir el formato MM/AA");
       return false;
     }
 
-    const [month, year] = expiry.split('/').map(Number);
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth() + 1;
-    const currentYear = currentDate.getFullYear() % 100;
+    if (/^\d{2}\/\d{2}$/.test(expiry)){
+      const [month, year] = expiry.split('/').map(Number);
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth() + 1;
+      const currentYear = currentDate.getFullYear() % 100;
 
-    if (month < 1 || month > 12) {
-      setError("Fecha inválida");
-      return false;
-    }
-    if (year < currentYear || (year == currentYear && month < currentMonth)) {
-      setError("Su tarjeta está vencida");
-      return false;
-    }
-
-    return true;
-  };
-
-  const processPayment = () => {
-    if (attempts === 0) {
-      const paymentAccepted = Math.random() > 0.5;
-      if (!paymentAccepted) {
-        setError("Pago rechazado. Ingresa otra tarjeta.");
-        setAttempts(attempts + 1);
+      if (month < 1 || month > 12){
+        setError("Fecha inválida");
         return false;
       }
-    }
-    setError("");
+      if (year < currentYear || (year == currentYear && month < currentMonth)){
+        setError("Su tarjeta está vencida");
+        return false;
+      }
+     }
+
+
     return true;
   };
 
@@ -133,122 +148,115 @@ const PaymentSelection = () => {
       return;
     }
 
-    if (selectedPaymentMethod.id === 'card' && !validateCardDetails()) {
+    if (selectedPaymentMethod.id === 3 && !validateCardDetails()) {
       return;
     }
 
-    if (selectedPaymentMethod.id === 'card' && !processPayment()) {
-      return;
+    // Process payment logic here
+    console.log("Payment method:", selectedPaymentMethod);
+    if (selectedPaymentMethod.id === 3) {
+      console.log("Card details:", cardDetails);
     }
-
-    setIsPaymentProcessed(true);
+    
+    // Si todo está correcto
     alert("Tu pago se realizó correctamente. ¡Muchas gracias!");
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-bold mb-6 text-center">Elegí cómo pagar</h2>
+    <div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <h2 className="text-2xl font-bold my-4">Elegí cómo pagar</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
         {paymentMethods.map((method) => (
           <Card
             key={method.id}
-            className={`cursor-pointer p-4 shadow-md rounded-md hover:bg-gray-100 transition-colors duration-300 
-              ${selectedPaymentMethod?.id === method.id ? 'bg-blue-100' : 'bg-white'}`}
+            className={`cursor-pointer shadow-none rounded-md hover:bg-gray-100 transition-colors duration-200 ${selectedPaymentMethod?.id === method.id ? 'bg-gray-100' : ''}`}
             onClick={() => handlePaymentMethodSelection(method)}
           >
-            <CardHeader className="text-lg">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-x-2">
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <div className='flex items-center gap-x-4'>
                   {method.icon}
-                  <span>{method.name}</span>
+                  {method.name}
                 </div>
-                <ChevronRight className="text-gray-500" />
-              </div>
+                <ChevronRight />
+              </CardTitle>
             </CardHeader>
           </Card>
         ))}
       </div>
 
-      {selectedPaymentMethod?.id === 'card' && (
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <h3 className="text-xl font-semibold mb-4">Detalles de Tarjeta</h3>
-
+      {selectedPaymentMethod?.id === 3 && (
+        <form className="mb-4">
+          <h3 className="text-xl font-semibold mb-2">Detalles de Tarjeta</h3>
           <div className="space-y-2">
-            <select
-              className="input-field"
-              value={selectedCardType}
-              onChange={(e) => setSelectedCardType(e.target.value)}
-              required
-            >
-              <option value="">Seleccione tipo de tarjeta</option>
-              <option value="credit">Tarjeta de crédito</option>
-              <option value="debit">Tarjeta de débito</option>
-            </select>
-
             <Input
               type="tel"
               name="number"
               placeholder="Número de tarjeta"
-              className="input-field"
-              value={cardDetails.number}
+              autoComplete="cc-number"
+              pattern="[0-9\s]{1, 19}"
+              maxLength="19"
               onChange={handleCardDetailChange}
+              value={cardDetails.number}
               required
             />
-
             <Input
               type="text"
               name="name"
               placeholder="Titular de la tarjeta"
-              className="input-field"
-              value={cardDetails.name}
+              autoComplete="cc-name"
+              maxLength="50"
               onChange={handleCardDetailChange}
+              value={cardDetails.name}
               required
             />
-
-            <div className="grid grid-cols-2 gap-2">
+            <div className="flex gap-2">
               <Input
                 type="text"
                 name="expiry"
                 placeholder="MM/AA"
-                className="input-field"
-                value={cardDetails.expiry}
+                autoComplete="cc-exp"
+                pattern="(0[1-9]|1[0-2])\/[0-9]{2}"
+                maxLength="5"
                 onChange={handleCardDetailChange}
+                value={cardDetails.expiry}
                 required
               />
               <Input
                 type="tel"
                 name="cvv"
                 placeholder="CVV"
-                className="input-field"
-                value={cardDetails.cvv}
+                autoComplete="cc-csc"
+                pattern="[0-9]{3}"
+                maxLength="3"
                 onChange={handleCardDetailChange}
+                value={cardDetails.cvv}
                 required
               />
             </div>
-
             <Input
               type="text"
               name="documentNumber"
               placeholder="Documento del titular"
-              maxLength="15"
+              maxLength="8"
               onChange={handleCardDetailChange}
               value={cardDetails.documentNumber}
               required
             />
           </div>
-
-          {error && <p className="text-red-600 text-sm">{error}</p>}
-
-          <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md">
-            Realizar Pedido
-          </Button>
+          <div className='flex items-center mt-2'>
+            <p className='text-xs text-gray-600 mr-4'>Procesamos el pago de forma segura con</p>
+            <Image unoptimized src='/logo-mercadopago.png' alt='logo mercadopago' width={70} height={70} />
+          </div>
         </form>
       )}
 
-      {isPaymentProcessed && (
-        <p className="text-green-600 mt-4 text-center">Pago procesado correctamente. ¡Gracias!</p>
-      )}
+      {error && <p className="text-red-500 mb-2">{error}</p>}
+
+      <Button onClick={handleSubmit} className="w-full">
+        Realizar Pedido
+      </Button>
     </div>
   );
 };
