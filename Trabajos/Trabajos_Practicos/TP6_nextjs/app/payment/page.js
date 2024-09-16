@@ -213,7 +213,7 @@ const PaymentSelection = () => {
               onChange={(e) => setSelectedCardType(e.target.value)}
               required
             >
-              <option value="">Seleccione tipo de tarjeta</option>
+              <option value="">Seleccioná el tipo de tarjeta</option>
               <option value="credit">Tarjeta de crédito</option>
               <option value="debit">Tarjeta de débito</option>
             </select>
@@ -286,9 +286,6 @@ const PaymentSelection = () => {
         Realizar Pedido
       </Button>
 
-      {isPaymentProcessed && (
-        <p className="text-green-600 mt-4 text-center">Pago procesado correctamente. ¡Gracias!</p>
-      )}
     </div>
   );
 };
