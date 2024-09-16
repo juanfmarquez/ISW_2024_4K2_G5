@@ -231,9 +231,9 @@ const PaymentSelection = () => {
               type="text"
               name="documentNumber"
               placeholder="Documento del titular"
-              className="input-field"
-              value={cardDetails.documentNumber}
+              maxLength="15"
               onChange={handleCardDetailChange}
+              value={cardDetails.documentNumber}
               required
             />
           </div>
