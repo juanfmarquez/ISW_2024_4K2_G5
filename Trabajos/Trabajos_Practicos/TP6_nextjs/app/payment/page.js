@@ -28,9 +28,9 @@ const PaymentSelection = () => {
   }, [quoteId, router]);
 
   const paymentMethods = [
-    { id: 'cash_pickup', name: 'Contado al retirar', icon: <DollarSign /> },
-    { id: 'cash_delivery', name: 'Contado contra entrega', icon: <DollarSign /> },
-    { id: 'card', name: 'Tarjeta de crédito/débito', icon: <CreditCard /> },
+    { id: 1, name: 'Contado al retirar', icon: <DollarSign /> },
+    { id: 2, name: 'Contado contra entrega', icon: <DollarSign /> },
+    { id: 3, name: 'Tarjeta de crédito/débito', icon: <CreditCard /> },
   ];
 
   const handlePaymentMethodSelection = (method) => {
@@ -148,13 +148,13 @@ const PaymentSelection = () => {
       return;
     }
 
-    if (selectedPaymentMethod.id === 'card' && !validateCardDetails()) {
+    if (selectedPaymentMethod.id === 3 && !validateCardDetails()) {
       return;
     }
 
     // Process payment logic here
     console.log("Payment method:", selectedPaymentMethod);
-    if (selectedPaymentMethod.id === 'card') {
+    if (selectedPaymentMethod.id === 3) {
       console.log("Card details:", cardDetails);
     }
     
@@ -186,7 +186,7 @@ const PaymentSelection = () => {
         ))}
       </div>
 
-      {selectedPaymentMethod?.id === 'card' && (
+      {selectedPaymentMethod?.id === 3 && (
         <form className="mb-4">
           <h3 className="text-xl font-semibold mb-2">Detalles de Tarjeta</h3>
           <div className="space-y-2">
