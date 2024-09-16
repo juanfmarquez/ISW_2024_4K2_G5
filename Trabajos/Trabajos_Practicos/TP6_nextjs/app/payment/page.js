@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronRight, CreditCard, DollarSign } from "lucide-react";
@@ -18,26 +18,36 @@ const PaymentSelection = () => {
   });
   const [error, setError] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [availablePaymentMethods, setAvailablePaymentMethods] = useState([]);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const quoteId = searchParams.get('quoteId');
 
   useEffect(() => {
+    const quoteId = searchParams.get('quoteId');
+    const paymentMethodsParam = searchParams.get('paymentMethods');
+  
     if (!quoteId) {
       router.push('/quotes');
     }
-  }, [quoteId, router]);
+    if (paymentMethodsParam) {
+      const methods = paymentMethodsParam.split(',').map(Number); // Convert IDs to numbers
+      setAvailablePaymentMethods(methods);
+    }
+  }, [searchParams, router]);
 
-  const paymentMethods = [
-    { id: 'cash_pickup', name: 'Contado al retirar', icon: <DollarSign /> },
-    { id: 'cash_delivery', name: 'Contado contra entrega', icon: <DollarSign /> },
-    { id: 'card', name: 'Tarjeta de crédito/débito', icon: <CreditCard /> },
+  const allPaymentMethods = [
+    { id: 1, name: 'Contado al retirar', icon: <DollarSign /> },
+    { id: 2, name: 'Contado contra entrega', icon: <DollarSign /> },
+    { id: 3, name: 'Tarjeta de crédito/débito', icon: <CreditCard /> },
   ];
+
+  const paymentMethods = allPaymentMethods.filter(method => availablePaymentMethods.includes(method.id));
 
   const handlePaymentMethodSelection = (method) => {
     setSelectedPaymentMethod(method);
     setError("");
   };
+
 
   const handleCardDetailChange = (e) => {
     const { name, value } = e.target;
@@ -146,9 +156,9 @@ const PaymentSelection = () => {
       const isSuccessful = Math.random() < 0.7; // 70% success rate
       setTimeout(() => {
         if (isSuccessful) {
-          resolve("Payment successful");
+          resolve("Pago exitoso");
         } else {
-          reject(new Error("Payment failed"));
+          reject(new Error("Pago fallido"));
         }
       }, 2000); // Simulate a 2-second processing time
     });
@@ -166,7 +176,6 @@ const PaymentSelection = () => {
       return;
     }
 
-
     setIsProcessing(true);
     setError("");
 
@@ -183,7 +192,6 @@ const PaymentSelection = () => {
 
   return (
     <div>
-
       <h2 className="text-2xl font-bold my-4">Elegí cómo pagar</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
         {paymentMethods.map((method) => (
@@ -205,7 +213,7 @@ const PaymentSelection = () => {
         ))}
       </div>
 
-      {selectedPaymentMethod?.id === 'card' && (
+      {selectedPaymentMethod?.id === 3 && (
         <form className="mb-4">
           <h3 className="text-xl font-semibold mb-2">Detalles de Tarjeta</h3>
           <div className="space-y-2">
@@ -270,6 +278,7 @@ const PaymentSelection = () => {
           </div>
         </form>
       )}
+
 
       {error && <p className="text-red-500 mb-2">{error}</p>}
 
