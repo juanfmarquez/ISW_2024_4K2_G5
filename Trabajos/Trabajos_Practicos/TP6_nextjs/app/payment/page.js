@@ -239,7 +239,7 @@ const PaymentSelection = () => {
               type="text"
               name="documentNumber"
               placeholder="Documento del titular"
-              maxLength="15"
+              maxLength="8"
               onChange={handleCardDetailChange}
               value={cardDetails.documentNumber}
               required
