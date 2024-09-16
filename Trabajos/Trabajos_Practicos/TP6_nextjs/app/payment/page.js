@@ -17,6 +17,7 @@ const PaymentSelection = () => {
     documentNumber: ""
   });
   const [error, setError] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const quoteId = searchParams.get('quoteId');
@@ -140,7 +141,20 @@ const PaymentSelection = () => {
     return true;
   };
 
-  const handleSubmit = (e) => {
+  const simulatePaymentProcess = () => {
+    return new Promise((resolve, reject) => {
+      const isSuccessful = Math.random() < 0.7; // 70% success rate
+      setTimeout(() => {
+        if (isSuccessful) {
+          resolve("Payment successful");
+        } else {
+          reject(new Error("Payment failed"));
+        }
+      }, 2000); // Simulate a 2-second processing time
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!selectedPaymentMethod) {
@@ -152,14 +166,19 @@ const PaymentSelection = () => {
       return;
     }
 
-    // Process payment logic here
-    console.log("Payment method:", selectedPaymentMethod);
-    if (selectedPaymentMethod.id === 'card') {
-      console.log("Card details:", cardDetails);
+
+    setIsProcessing(true);
+    setError("");
+
+    try {
+      await simulatePaymentProcess();
+      alert("Tu pago se realizó correctamente. ¡Muchas gracias!");
+      // Here you might want to redirect the user or update the UI
+    } catch (error) {
+      setError("Lo sentimos, hubo un problema al procesar el pago. Por favor, intenta de nuevo.");
+    } finally {
+      setIsProcessing(false);
     }
-    
-    // Si todo está correcto
-    alert("Tu pago se realizó correctamente. ¡Muchas gracias!");
   };
 
   return (
@@ -254,8 +273,8 @@ const PaymentSelection = () => {
 
       {error && <p className="text-red-500 mb-2">{error}</p>}
 
-      <Button onClick={handleSubmit} className="w-full">
-        Realizar Pedido
+      <Button onClick={handleSubmit} className="w-full" disabled={isProcessing}>
+        {isProcessing ? "Procesando..." : "Realizar Pedido"}      
       </Button>
     </div>
   );
