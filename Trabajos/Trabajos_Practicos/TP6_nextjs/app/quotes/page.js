@@ -36,6 +36,7 @@ const QuoteSelectionPayment = () => {
       cost: 4560,
       rating: 4.5,
       carrierName: "Transportes Rápidos S.A.",
+      carrierEmail: "juanroldan000@hotmail.com",
       paymentMethods: [1, 2, 3],
       status: "pendiente",
       shippingOrderId: 1
@@ -47,6 +48,7 @@ const QuoteSelectionPayment = () => {
       cost: 6000,
       rating: 4.2,
       carrierName: "Envíos Seguros S.R.L.",
+      carrierEmail: "juanpedroroldan1@gmail.com",
       paymentMethods: [1, 3],
       status: "pendiente",
       shippingOrderId: 1
@@ -58,6 +60,7 @@ const QuoteSelectionPayment = () => {
       cost: 3500,
       rating: 4.8,
       carrierName: "Transportes Económicos",
+      carrierEmail: "juanperoldan03@yahoo.com.ar",
       paymentMethods: [2],
       status: "pendiente",
       shippingOrderId: 1
@@ -77,7 +80,14 @@ const QuoteSelectionPayment = () => {
 
 
   const handleQuoteSelection = (quoteId) => {
-    router.push(`/payment?quoteId=${quoteId}`);
+    // Encuentra el presupuesto seleccionado
+    const selectedQuote = quotes.find(quote => quote.id === quoteId);
+  
+    // Verifica si se encontró el presupuesto
+    if (selectedQuote) {
+      router.push(`/payment?quoteId=${selectedQuote.id}
+        &carrierEmail=${encodeURIComponent(selectedQuote.carrierEmail)}`);
+    }
   };
 
   const formatDate = (dateString) => {

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronRight, CreditCard, DollarSign } from "lucide-react";
 import Image from 'next/image';
+import emailjs from 'emailjs-com';
 
 const PaymentSelection = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
@@ -14,12 +15,14 @@ const PaymentSelection = () => {
     name: "",
     expiry: "",
     cvv: "",
-    documentNumber: ""
+    documentNumber: "",
   });
   const [error, setError] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
   const quoteId = searchParams.get('quoteId');
+  const carrierEmail = searchParams.get('carrierEmail');
+
 
   useEffect(() => {
     if (!quoteId) {
@@ -140,7 +143,7 @@ const PaymentSelection = () => {
     return true;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!selectedPaymentMethod) {
@@ -160,6 +163,24 @@ const PaymentSelection = () => {
     
     // Si todo está correcto
     alert("Tu pago se realizó correctamente. ¡Muchas gracias!");
+
+     // Configuración de EmailJS
+     const serviceID = 'service_o64qt3m';
+     const templateID = 'template_q7985ou';
+     const userID = 'k1DvsfIoSwB0yg-p9'; 
+ 
+     try {
+       await emailjs.send(serviceID, templateID, {
+         user_email: carrierEmail, 
+         subject: 'Confirmación de pago recibido',
+         message: `Nos complace informarle que el pago para la cotización ${quoteId} ha sido realizado con éxito`, 
+       }, userID);
+ 
+       console.log("Correo enviado con éxito");
+     } catch (error) {
+       console.error("Error al enviar el correo:", error);
+       setError("Ocurrió un error al enviar el correo.");
+     }
   };
 
   return (
