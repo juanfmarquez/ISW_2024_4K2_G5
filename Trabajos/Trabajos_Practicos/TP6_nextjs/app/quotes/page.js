@@ -36,6 +36,7 @@ const QuoteSelectionPayment = () => {
       cost: 4560,
       rating: 4.5,
       carrierName: "Transportes Rápidos S.A.",
+      carrierEmail: "juanroldan000@hotmail.com",
       paymentMethods: [1, 2, 3],
       status: "pendiente",
       shippingOrderId: 1
@@ -47,6 +48,7 @@ const QuoteSelectionPayment = () => {
       cost: 6000,
       rating: 4.2,
       carrierName: "Envíos Seguros S.R.L.",
+      carrierEmail: "juanpedroroldan1@gmail.com",
       paymentMethods: [1, 3],
       status: "pendiente",
       shippingOrderId: 1
@@ -58,6 +60,7 @@ const QuoteSelectionPayment = () => {
       cost: 3500,
       rating: 4.8,
       carrierName: "Transportes Económicos",
+      carrierEmail: "juanperoldan03@yahoo.com.ar",
       paymentMethods: [2],
       status: "pendiente",
       shippingOrderId: 1
@@ -76,10 +79,10 @@ const QuoteSelectionPayment = () => {
   };
 
 
-  const handleQuoteSelection = (quoteId, paymentMethods) => {
+  const handleQuoteSelection = (quoteId, paymentMethods, carrierEmail) => {
     const paymentMethodsParam = paymentMethods.join(',');
-    router.push(`/payment?quoteId=${quoteId}&paymentMethods=${paymentMethodsParam}`);
-  };
+    router.push(`/payment?quoteId=${quoteId}&paymentMethods=${paymentMethodsParam}&carrierEmail=${encodeURIComponent(carrierEmail)}`);  
+  }
   
 
   const formatDate = (dateString) => {
@@ -110,7 +113,7 @@ const QuoteSelectionPayment = () => {
           <Card
             key={quote.id}
             className="cursor-pointer shadow-none rounded-md hover:bg-gray-100 transition-colors duration-200"
-            onClick={() => handleQuoteSelection(quote.id, quote.paymentMethods)}
+            onClick={() => handleQuoteSelection(quote.id, quote.paymentMethods, quote.carrierEmail)}
           >
             <CardHeader>
               <CardTitle className="flex items-center justify-between">{quote.carrierName}
