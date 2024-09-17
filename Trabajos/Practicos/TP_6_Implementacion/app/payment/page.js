@@ -1,11 +1,13 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronRight, CreditCard, DollarSign } from "lucide-react";
 import Image from 'next/image';
+import emailjs from 'emailjs-com';
+import { quotes, paymentMethods, shipping_orders } from '../db';
 
 const PaymentSelection = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
@@ -14,76 +16,82 @@ const PaymentSelection = () => {
     name: "",
     expiry: "",
     cvv: "",
-    documentNumber: ""
+    documentNumber: "",
   });
   const [error, setError] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [availablePaymentMethods, setAvailablePaymentMethods] = useState([]);
+  const [attempts, setAttempts] = useState(0);
+  const [isPaymentProcessed, setIsPaymentProcessed] = useState(false);
+  const [selectedCardType, setSelectedCardType] = useState("");
+  const [lastAttemptedCard, setLastAttemptedCard] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
   const quoteId = searchParams.get('quoteId');
-
+  const carrierEmail = searchParams.get('carrierEmail');
+  const [selectedQuote, setSelectedQuote] = useState(null);
+  
   useEffect(() => {
+    const quoteId = searchParams.get('quoteId');
     if (!quoteId) {
       router.push('/quotes');
+    } else {
+      const quote = quotes.find(q => q.id === parseInt(quoteId));
+      if (quote) {
+        setSelectedQuote(quote);
+        // Filter available payment methods based on the quote
+        const availableMethods = paymentMethods.filter(method => 
+          quote.paymentMethods.includes(method.id)
+        );
+        setAvailablePaymentMethods(availableMethods);
+      } else {
+        // Handle case where quote is not found
+        router.push('/quotes');
+      }
     }
-  }, [quoteId, router]);
+  }, [searchParams, router]);
 
-  const paymentMethods = [
-    { id: 1, name: 'Contado al retirar', icon: <DollarSign /> },
-    { id: 2, name: 'Contado contra entrega', icon: <DollarSign /> },
-    { id: 3, name: 'Tarjeta de crédito/débito', icon: <CreditCard /> },
-  ];
 
   const handlePaymentMethodSelection = (method) => {
     setSelectedPaymentMethod(method);
     setError("");
   };
 
+
   const handleCardDetailChange = (e) => {
     const { name, value } = e.target;
 
-    // Validación del número de tarjeta (solo números y formateo con espacios)
     if (name === 'number') {
       let formattedValue = value.replace(/\D/g, '');
       if (formattedValue.length > 0) {
-          formattedValue = formattedValue.match(/.{1,4}/g).join(' ');
+        formattedValue = formattedValue.match(/.{1,4}/g).join(' ');
       }
       setCardDetails({ ...cardDetails, [name]: formattedValue });
     }
-
-    // Validación del nombre del titular (solo letras)
     else if (name === 'name') {
       if (/^[a-zA-Z\s]*$/.test(value)) {
         setCardDetails({ ...cardDetails, [name]: value });
       }
     }
-
-    // Validación de fecha de expiración (solo números y formato MM/AA)
     else if (name === 'expiry') {
       let formattedValue = value.replace(/\D/g, '');
       if (formattedValue.length > 2) {
-          const month = parseInt(formattedValue.slice(0, 2), 10);
+        const month = parseInt(formattedValue.slice(0, 2), 10);
       }
       if (value.length === 3 && e.nativeEvent.inputType === 'deleteContentBackward') {
-        // Permitir borrar el slash manualmente
         formattedValue = formattedValue.slice(0, 2);
       } else if (formattedValue.length > 2) {
-          // Asegurarse de que el tercer carácter sea "/"
-          formattedValue = formattedValue.slice(0, 2) + '/' + formattedValue.slice(2);
+        formattedValue = formattedValue.slice(0, 2) + '/' + formattedValue.slice(2);
       }
-      // Limitar el número total de caracteres a 5 (MM/AA)
       if (formattedValue.length <= 5) {
-          setCardDetails({ ...cardDetails, [name]: formattedValue });
+        setCardDetails({ ...cardDetails, [name]: formattedValue });
       }
     }
-
-    // Validación del CVV (solo números)
     else if (name === 'cvv') {
       if (/^[0-9]{0,3}$/.test(value)) {
         setCardDetails({ ...cardDetails, [name]: value });
       }
     }
-
-    // Validación del número de documento (solo números)
     else if (name === 'documentNumber') {
       if (/^[0-9]*$/.test(value)) {
         setCardDetails({ ...cardDetails, [name]: value });
@@ -95,52 +103,69 @@ const PaymentSelection = () => {
 
   const validateCardDetails = () => {
     const { number, cvv, expiry } = cardDetails;
-    
-    // Validar que no haya campos vacíos
+
     if (!Object.values(cardDetails).every(value => value.trim() !== "")) {
       setError("Por favor, completa todos los detalles de la tarjeta.");
       return false;
     }
 
-    // Validación de número de tarjeta (16 dígitos)
     if (number && number.replace(/\s+/g, '').length !== 16) {
       setError("El número de la tarjeta debe tener 16 dígitos.");
       return false;
     }
 
-    // Validación del CVV (3 dígitos)
     if (cvv && cvv.length !== 3) {
       setError("El CVV debe tener 3 dígitos.");
       return false;
     }
 
-    // Validación de fecha de expiración (5 caracteres en formato MM/AA)
     if (expiry && expiry.length !== 5) {
       setError("La fecha de expiración debe cumplir el formato MM/AA");
       return false;
     }
 
-    if (/^\d{2}\/\d{2}$/.test(expiry)){
+    if (/^\d{2}\/\d{2}$/.test(expiry)) {
       const [month, year] = expiry.split('/').map(Number);
       const currentDate = new Date();
       const currentMonth = currentDate.getMonth() + 1;
       const currentYear = currentDate.getFullYear() % 100;
 
-      if (month < 1 || month > 12){
+      if (month < 1 || month > 12) {
         setError("Fecha inválida");
         return false;
       }
-      if (year < currentYear || (year == currentYear && month < currentMonth)){
+      if (year < currentYear || (year == currentYear && month < currentMonth)) {
         setError("Su tarjeta está vencida");
         return false;
       }
-     }
+    }
 
+    // Check if the card number is the same as the last attempted one
+    if (number.replace(/\s+/g, '') === lastAttemptedCard) {
+      setError("Por favor, ingresa una tarjeta diferente a la anterior.");
+      return false;
+    }
 
     return true;
   };
 
-  const handleSubmit = (e) => {
+  const processPayment = () => {
+    const currentCardNumber = cardDetails.number.replace(/\s+/g, '');
+
+    if (attempts === 0) {
+      const paymentAccepted = Math.random() < 0.5; // 50% chance of failure on first attempt
+      if (!paymentAccepted) {
+        setError("Pago rechazado. Por favor, ingresá otra tarjeta.");
+        setAttempts(attempts + 1);
+        setLastAttemptedCard(currentCardNumber);
+        return false;
+      }
+    }
+    setError("");
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!selectedPaymentMethod) {
@@ -148,26 +173,55 @@ const PaymentSelection = () => {
       return;
     }
 
-    if (selectedPaymentMethod.id === 3 && !validateCardDetails()) {
+    if (selectedPaymentMethod.id === 'card' && !validateCardDetails()) {
       return;
     }
 
-    // Process payment logic here
-    console.log("Payment method:", selectedPaymentMethod);
-    if (selectedPaymentMethod.id === 3) {
-      console.log("Card details:", cardDetails);
+    setIsProcessing(true);
+    setError("");
+
+    try {
+      await processPayment();
+      alert("Tu pago se realizó correctamente. ¡Muchas gracias!");
+      // Here you might want to redirect the user or update the UI
+    } catch (error) {
+      setError("Lo sentimos, hubo un problema al procesar el pago. Por favor, intentá de nuevo.");
+    } finally {
+      setIsProcessing(false);
     }
-    
-    // Si todo está correcto
+
+    // Set payment as processed
+    setIsPaymentProcessed(true);
+    setError(""); // Clear any previous errors
     alert("Tu pago se realizó correctamente. ¡Muchas gracias!");
+
+    // Configuración de EmailJS
+    const serviceID = 'service_o64qt3m';
+    const templateID = 'template_q7985ou';
+    const userID = 'k1DvsfIoSwB0yg-p9';
+
+    try {
+      await emailjs.send(serviceID, templateID, {
+        user_email: carrierEmail,
+        subject: 'Confirmación de pago recibido',
+        message: `Nos complace informarle que el pago para la cotización ${quoteId} ha sido realizado con éxito`,
+      }, userID);
+
+      console.log("Correo enviado con éxito");
+    } catch (error) {
+      console.log("Error al enviar el correo:", error);
+      setError("Ocurrió un error al enviar el correo.");
+    }
   };
 
   return (
     <div>
-
-      <h2 className="text-2xl font-bold my-4">Elegí cómo pagar</h2>
+      <h2 className="text-2xl font-bold mt-4">Elegí cómo pagar</h2>
+      {selectedQuote && (
+        <p className='text-gray-400 text-sm mb-6 mt-2'>{selectedQuote.carrierName}</p>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-        {paymentMethods.map((method) => (
+        {availablePaymentMethods.map((method) => (
           <Card
             key={method.id}
             className={`cursor-pointer shadow-none rounded-md hover:bg-gray-100 transition-colors duration-200 ${selectedPaymentMethod?.id === method.id ? 'bg-gray-100' : ''}`}
@@ -190,6 +244,17 @@ const PaymentSelection = () => {
         <form className="mb-4">
           <h3 className="text-xl font-semibold mb-2">Detalles de Tarjeta</h3>
           <div className="space-y-2">
+            <select
+              className="input-field"
+              value={selectedCardType}
+              onChange={(e) => setSelectedCardType(e.target.value)}
+              required
+            >
+              <option value="">Seleccioná el tipo de tarjeta</option>
+              <option value="credit">Tarjeta de crédito</option>
+              <option value="debit">Tarjeta de débito</option>
+            </select>
+
             <Input
               type="tel"
               name="number"
@@ -252,11 +317,13 @@ const PaymentSelection = () => {
         </form>
       )}
 
+
       {error && <p className="text-red-500 mb-2">{error}</p>}
 
-      <Button onClick={handleSubmit} className="w-full">
-        Realizar Pedido
+      <Button onClick={handleSubmit} className="w-full" disabled={isProcessing}>
+        {isProcessing ? "Procesando..." : "Realizar Pedido"}
       </Button>
+
     </div>
   );
 };

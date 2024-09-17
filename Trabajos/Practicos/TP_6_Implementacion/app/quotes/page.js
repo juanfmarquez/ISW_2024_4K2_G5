@@ -1,68 +1,13 @@
 'use client'
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChevronRight, Star, CreditCard, DollarSign } from "lucide-react";
+import { ChevronRight, Star } from "lucide-react";
 import { useRouter } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
+import { quotes, paymentMethods } from '../db';
 
 const QuoteSelectionPayment = () => {
   const router = useRouter();
-
-  const paymentMethods = [
-    { id: 1, name: 'Contado al retirar', icon: <DollarSign /> },
-    { id: 2, name: 'Contado contra entrega', icon: <DollarSign /> },
-    { id: 3, name: 'Tarjeta de crédito/débito', icon: <CreditCard /> },
-  ];
-
-  const shipping_orders = [
-    {
-      id: 1,
-      status: "pendiente"
-    },
-    {
-      id: 2,
-      status: "confirmada"
-    },
-    {
-      id: 3,
-      status: "completada"
-    }
-  ]
-  const quotes = [
-    {
-      id: 1,
-      pickup: "2024-09-15",
-      delivery: "2024-09-17",
-      cost: 4560,
-      rating: 4.5,
-      carrierName: "Transportes Rápidos S.A.",
-      paymentMethods: [1, 2, 3],
-      status: "pendiente",
-      shippingOrderId: 1
-    },
-    {
-      id: 2,
-      pickup: "2024-09-16",
-      delivery: "2024-09-18",
-      cost: 6000,
-      rating: 4.2,
-      carrierName: "Envíos Seguros S.R.L.",
-      paymentMethods: [1, 3],
-      status: "pendiente",
-      shippingOrderId: 1
-    },
-    {
-      id: 3,
-      pickup: "2024-09-15",
-      delivery: "2024-09-19",
-      cost: 3500,
-      rating: 4.8,
-      carrierName: "Transportes Económicos",
-      paymentMethods: [2],
-      status: "pendiente",
-      shippingOrderId: 1
-    },
-  ];
 
   const getPaymentMethodBadges = (methodIds) => {
     return methodIds.map(id => {
@@ -76,9 +21,10 @@ const QuoteSelectionPayment = () => {
   };
 
 
-  const handleQuoteSelection = (quoteId) => {
-    router.push(`/payment?quoteId=${quoteId}`);
-  };
+  const handleQuoteSelection = (quote) => {
+    router.push(`/payment?quoteId=${quote.id}`);  
+  }
+  
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -102,13 +48,13 @@ const QuoteSelectionPayment = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold my-4">Elegí un Presupuesto</h2>
+      <h2 className="text-2xl font-bold my-4">Elegí un presupuesto</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
         {quotes.map((quote) => (
           <Card
             key={quote.id}
             className="cursor-pointer shadow-none rounded-md hover:bg-gray-100 transition-colors duration-200"
-            onClick={() => handleQuoteSelection(quote.id)}
+            onClick={() => handleQuoteSelection(quote)}
           >
             <CardHeader>
               <CardTitle className="flex items-center justify-between">{quote.carrierName}
