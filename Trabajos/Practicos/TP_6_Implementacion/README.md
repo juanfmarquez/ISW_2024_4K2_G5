@@ -34,6 +34,14 @@ npm run dev
 
 La aplicación estará disponible en [http://localhost:3000](http://localhost:3000).
 
+## Reglas de estilo de código
+Utilizamos [JavaScript Standard Style](https://standardjs.com/). Es el estándar para JavaScript y funciona para todas sus librerías. Además, proporciona una revisión y corrección automática con el comando `standard --fix`.
+
+## Tecnologías
+- Next.js, es un framework de React
+- TailwindCSS para estilo
+- emailjs para el envío de emails
+
 ## Nota importante
 
 Esta aplicación está diseñada principalmente para dispositivos móviles. Para una mejor experiencia, se recomienda utilizar el modo de visualización responsive del navegador:

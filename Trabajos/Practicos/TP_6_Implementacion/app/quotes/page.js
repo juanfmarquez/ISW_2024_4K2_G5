@@ -1,74 +1,75 @@
 'use client'
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChevronRight, Star } from "lucide-react";
-import { useRouter } from 'next/navigation';
-import { Badge } from '@/components/ui/badge';
-import { quotes, paymentMethods } from '../db';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import React, { useState, useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { ChevronRight, Star } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Badge } from '@/components/ui/badge'
+import { quotes, paymentMethods } from '../db'
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 
 const QuoteSelectionPayment = () => {
-  const router = useRouter();
-  const [isQuoteConfirmed, setIsQuoteConfirmed] = useState(false);
-  const [confirmedQuoteId, setConfirmedQuoteId] = useState(null);
+  const router = useRouter()
+  const [isQuoteConfirmed, setIsQuoteConfirmed] = useState(false)
+  const [confirmedQuoteId, setConfirmedQuoteId] = useState(null)
 
   useEffect(() => {
     const checkConfirmedQuotes = () => {
-      const confirmedQuote = quotes.find(quote => quote.shippingOrderId === 1 && quote.status === "confirmada");
-      setIsQuoteConfirmed(!!confirmedQuote);
-      setConfirmedQuoteId(confirmedQuote ? confirmedQuote.id : null);
-    };
+      const confirmedQuote = quotes.find(quote => quote.shippingOrderId === 1 && quote.status === 'confirmada')
+      setIsQuoteConfirmed(!!confirmedQuote)
+      setConfirmedQuoteId(confirmedQuote ? confirmedQuote.id : null)
+    }
 
-    checkConfirmedQuotes();
-  }, []);
+    checkConfirmedQuotes()
+  }, [])
 
   const getPaymentMethodBadges = (methodIds) => {
     return methodIds.map(id => {
-      const method = paymentMethods.find(m => m.id === id);
-      return method ? (
-        <Badge key={id} variant="secondary" className="m-1">
-          {method.name}
-        </Badge>
-      ) : null;
-    });
-  };
-  
+      const method = paymentMethods.find(m => m.id === id)
+      return method
+        ? (
+          <Badge key={id} variant='secondary' className='m-1'>
+            {method.name}
+          </Badge>
+          )
+        : null
+    })
+  }
+
   const handleQuoteSelection = (quote) => {
     if (isQuoteConfirmed && quote.id !== confirmedQuoteId) {
-      alert("No es posible aceptar otro presupuesto porque ya hay uno confirmado para este envío.");
+      alert('No es posible aceptar otro presupuesto porque ya hay uno confirmado para este envío.')
     } else if (quote.id === confirmedQuoteId) {
-      alert("Esta cotización ya está confirmada.");
+      alert('Esta cotización ya está confirmada.')
     } else {
-      router.push(`/payment?quoteId=${quote.id}`);  
+      router.push(`/payment?quoteId=${quote.id}`)
     }
   }
 
-
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
+    const date = new Date(dateString)
     const formatter = new Intl.DateTimeFormat('es-AR', {
       weekday: 'short',
       day: 'numeric',
       month: 'short'
-    });
+    })
 
-    const formattedDate = formatter.format(date);
-    return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
-  };
+    const formattedDate = formatter.format(date)
+    return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
+  }
 
   const calculateDateDifference = (pickup, delivery) => {
-    const pickupDate = new Date(pickup);
-    const deliveryDate = new Date(delivery);
-    const diffTime = Math.abs(deliveryDate - pickupDate);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  };
+    const pickupDate = new Date(pickup)
+    const deliveryDate = new Date(delivery)
+    const diffTime = Math.abs(deliveryDate - pickupDate)
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+    return diffDays
+  }
 
   return (
     <div>
-      <h2 className="text-2xl font-bold my-4">Elegí un presupuesto</h2>
+      <h2 className='text-2xl font-bold my-4'>Elegí un presupuesto</h2>
       {isQuoteConfirmed && (
-        <Alert variant="destructive" className="mb-4">
+        <Alert variant='destructive' className='mb-4'>
           <AlertTitle>Atención</AlertTitle>
           <AlertDescription>
             Ya hay un presupuesto confirmado para este envío. No es posible seleccionar otro.
@@ -76,20 +77,20 @@ const QuoteSelectionPayment = () => {
         </Alert>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+      <div className='grid grid-cols-1 md:grid-cols-3 gap-3 mb-4'>
         {quotes.map((quote) => (
           <Card
             key={quote.id}
-            className="cursor-pointer shadow-none rounded-md hover:bg-gray-100 transition-colors duration-200"
+            className='cursor-pointer shadow-none rounded-md hover:bg-gray-100 transition-colors duration-200'
             onClick={() => handleQuoteSelection(quote)}
           >
             <CardHeader>
-            {quote.id === confirmedQuoteId && (
-                <Badge className="mb-2 flex items-center gap-x-1 bg-green-100 text-green-900 shadow-none">
+              {quote.id === confirmedQuoteId && (
+                <Badge className='mb-2 flex items-center gap-x-1 bg-green-100 text-green-900 shadow-none'>
                   Cotización Confirmada
                 </Badge>
               )}
-              <CardTitle className="flex items-center justify-between">{quote.carrierName}
+              <CardTitle className='flex items-center justify-between'>{quote.carrierName}
                 <div className='flex items-center gap-x-1'>
                   <p>$ {Intl.NumberFormat('es-AR').format(quote.cost)} </p>
                   <ChevronRight />
@@ -121,7 +122,7 @@ const QuoteSelectionPayment = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default QuoteSelectionPayment;
+export default QuoteSelectionPayment
