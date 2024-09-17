@@ -86,7 +86,7 @@ const QuoteSelectionPayment = () => {
           >
             <CardHeader>
               {quote.id === confirmedQuoteId && (
-                <Badge className='mb-2 flex items-center gap-x-1 bg-green-100 text-green-900 shadow-none'>
+                <Badge className='mb-2 flex items-center gap-x-1 bg-green-100 text-green-900 shadow-none hover:bg-green-100 hover:text-green-900'>
                   Cotización Confirmada
                 </Badge>
               )}

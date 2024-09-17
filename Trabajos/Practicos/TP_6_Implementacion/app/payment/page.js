@@ -224,10 +224,6 @@ const PaymentSelection = () => {
 
       await emailjs.send(serviceID, templateID, emailContent, userID)
       console.log('Correo enviado con éxito')
-    } catch (error) {
-      console.error('Error:', error)
-      setError('Lo sentimos, hubo un problema al procesar el pago. Por favor, intentá con otra tarjeta.')
-    } finally {
       // Update the status of the shipping order and the selected quote
       if (selectedQuote) {
         // Find and update the shipping order
@@ -244,6 +240,11 @@ const PaymentSelection = () => {
       }
       const paymentId = Math.floor(Math.random() * 100000000000).toString().padStart(11, '0')
       alert(`Tu pago se realizó correctamente. ¡Muchas gracias!\nID de pago: ${paymentId}`)
+      router.push('/quotes')
+    } catch (error) {
+      console.error('Error:', error)
+      setError('Lo sentimos, hubo un problema al procesar el pago. Por favor, intentá con otra tarjeta.')
+    } finally {
       setIsProcessing(false)
     }
   }
