@@ -4,7 +4,14 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChevronRight, CreditCard, DollarSign } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { ChevronRight } from "lucide-react";
 import Image from 'next/image';
 import emailjs from 'emailjs-com';
 import { quotes, paymentMethods, shipping_orders } from '../db';
@@ -23,14 +30,12 @@ const PaymentSelection = () => {
   const [availablePaymentMethods, setAvailablePaymentMethods] = useState([]);
   const [attempts, setAttempts] = useState(0);
   const [isPaymentProcessed, setIsPaymentProcessed] = useState(false);
-  const [selectedCardType, setSelectedCardType] = useState("");
   const [lastAttemptedCard, setLastAttemptedCard] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const quoteId = searchParams.get('quoteId');
-  const carrierEmail = searchParams.get('carrierEmail');
   const [selectedQuote, setSelectedQuote] = useState(null);
-  
+  const [cardTypeSelected, setCardTypeSelected] = useState(false);
+
   useEffect(() => {
     const quoteId = searchParams.get('quoteId');
     if (!quoteId) {
@@ -40,7 +45,7 @@ const PaymentSelection = () => {
       if (quote) {
         setSelectedQuote(quote);
         // Filter available payment methods based on the quote
-        const availableMethods = paymentMethods.filter(method => 
+        const availableMethods = paymentMethods.filter(method =>
           quote.paymentMethods.includes(method.id)
         );
         setAvailablePaymentMethods(availableMethods);
@@ -142,7 +147,7 @@ const PaymentSelection = () => {
 
     // Check if the card number is the same as the last attempted one
     if (number.replace(/\s+/g, '') === lastAttemptedCard) {
-      setError("Por favor, ingresa una tarjeta diferente a la anterior.");
+      setError("Por favor, ingresá una tarjeta diferente a la anterior.");
       return false;
     }
 
@@ -150,12 +155,17 @@ const PaymentSelection = () => {
   };
 
   const processPayment = () => {
+    // If the payment method is not a card, always approve
+    if (selectedPaymentMethod.id !== 3) {
+      return true;
+    }
+
     const currentCardNumber = cardDetails.number.replace(/\s+/g, '');
 
     if (attempts === 0) {
       const paymentAccepted = Math.random() < 0.5; // 50% chance of failure on first attempt
       if (!paymentAccepted) {
-        setError("Pago rechazado. Por favor, ingresá otra tarjeta.");
+        setError("El pago se rechazó por saldo insuficiente. Por favor, ingresá otra tarjeta.");
         setAttempts(attempts + 1);
         setLastAttemptedCard(currentCardNumber);
         return false;
@@ -173,7 +183,7 @@ const PaymentSelection = () => {
       return;
     }
 
-    if (selectedPaymentMethod.id === 'card' && !validateCardDetails()) {
+    if (selectedPaymentMethod.id === 3 && !validateCardDetails()) {
       return;
     }
 
@@ -181,36 +191,68 @@ const PaymentSelection = () => {
     setError("");
 
     try {
-      await processPayment();
-      alert("Tu pago se realizó correctamente. ¡Muchas gracias!");
-      // Here you might want to redirect the user or update the UI
-    } catch (error) {
-      setError("Lo sentimos, hubo un problema al procesar el pago. Por favor, intentá de nuevo.");
-    } finally {
-      setIsProcessing(false);
-    }
+      // Simulate payment processing with a 2-second delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
-    // Set payment as processed
-    setIsPaymentProcessed(true);
-    setError(""); // Clear any previous errors
-    alert("Tu pago se realizó correctamente. ¡Muchas gracias!");
+      const paymentSuccessful = processPayment();
 
-    // Configuración de EmailJS
-    const serviceID = 'service_o64qt3m';
-    const templateID = 'template_q7985ou';
-    const userID = 'k1DvsfIoSwB0yg-p9';
+      if (!paymentSuccessful) {
+        throw new Error("Pago fallido. Por favor, reintentá.");
+      }
 
-    try {
-      await emailjs.send(serviceID, templateID, {
-        user_email: carrierEmail,
-        subject: 'Confirmación de pago recibido',
-        message: `Nos complace informarle que el pago para la cotización ${quoteId} ha sido realizado con éxito`,
-      }, userID);
+      setIsPaymentProcessed(true);
 
+      // Configuración de EmailJS
+      const serviceID = 'service_o64qt3m';
+      const templateID = 'template_q7985ou';
+      const userID = 'k1DvsfIoSwB0yg-p9';
+
+      const emailContent = {
+        user_email: selectedQuote.carrierEmail,
+        subject: 'Confirmación de Pago - Tango App',
+        message: `
+        Hola ${selectedQuote.carrierName},
+        
+        ¡Felicitaciones! Tu servicio fue contratado, te dejamos un resumen del envío:
+        
+        Detalles del envío:          
+        - Monto del pago: $${selectedQuote.cost}
+        - Método de pago: ${selectedPaymentMethod.name}
+        - Fecha de retiro: ${selectedQuote.pickup}
+        - Fecha de entrega: ${selectedQuote.delivery}
+                  
+        Si necesitás asistencia, no dudes en contactarnos a través de la aplicación o respondiendo a este correo.
+                  
+        Saludos,
+        El equipo de Tango App
+      `
+      };
+
+      await emailjs.send(serviceID, templateID, emailContent, userID);
       console.log("Correo enviado con éxito");
+
     } catch (error) {
-      console.log("Error al enviar el correo:", error);
-      setError("Ocurrió un error al enviar el correo.");
+      console.error("Error:", error);
+      setError("Lo sentimos, hubo un problema al procesar el pago. Por favor, intentá con otra tarjeta.");
+    } finally {
+      // Update the status of the shipping order and the selected quote
+      if (selectedQuote) {
+        // Find and update the shipping order
+        const shippingOrderIndex = shipping_orders.findIndex(order => order.id === selectedQuote.shippingOrderId);
+        if (shippingOrderIndex !== -1) {
+          shipping_orders[shippingOrderIndex].status = "confirmada";
+        }
+    
+        // Find and update the selected quote
+        const quoteIndex = quotes.findIndex(quote => quote.id === selectedQuote.id);
+        if (quoteIndex !== -1) {
+          quotes[quoteIndex].status = "confirmada";
+        }
+      }    
+      let paymentId = Math.floor(Math.random() * 100000000000).toString().padStart(11, '0');
+      alert(`Tu pago se realizó correctamente. ¡Muchas gracias!\nID de pago: ${paymentId}`);
+      setIsProcessing(false);
+      
     }
   };
 
@@ -242,73 +284,89 @@ const PaymentSelection = () => {
 
       {selectedPaymentMethod?.id === 3 && (
         <form className="mb-4">
-          <h3 className="text-xl font-semibold mb-2">Detalles de Tarjeta</h3>
+          <h3 className="text-xl font-semibold my-4">Detalles de Tarjeta</h3>
           <div className="space-y-2">
-            <select
-              className="input-field"
-              value={selectedCardType}
-              onChange={(e) => setSelectedCardType(e.target.value)}
-              required
-            >
-              <option value="">Seleccioná el tipo de tarjeta</option>
-              <option value="credit">Tarjeta de crédito</option>
-              <option value="debit">Tarjeta de débito</option>
-            </select>
-
-            <Input
-              type="tel"
-              name="number"
-              placeholder="Número de tarjeta"
-              autoComplete="cc-number"
-              pattern="[0-9\s]{1, 19}"
-              maxLength="19"
-              onChange={handleCardDetailChange}
-              value={cardDetails.number}
-              required
-            />
-            <Input
-              type="text"
-              name="name"
-              placeholder="Titular de la tarjeta"
-              autoComplete="cc-name"
-              maxLength="50"
-              onChange={handleCardDetailChange}
-              value={cardDetails.name}
-              required
-            />
-            <div className="flex gap-2">
-              <Input
-                type="text"
-                name="expiry"
-                placeholder="MM/AA"
-                autoComplete="cc-exp"
-                pattern="(0[1-9]|1[0-2])\/[0-9]{2}"
-                maxLength="5"
-                onChange={handleCardDetailChange}
-                value={cardDetails.expiry}
-                required
-              />
+            <Select onValueChange={(value) => setCardTypeSelected(true)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Seleccioná el tipo de tarjeta" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="credit">Tarjeta de crédito</SelectItem>
+                <SelectItem value="debit">Tarjeta de débito</SelectItem>
+              </SelectContent>
+            </Select>
+            {cardTypeSelected && (<>
               <Input
                 type="tel"
-                name="cvv"
-                placeholder="CVV"
-                autoComplete="cc-csc"
-                pattern="[0-9]{3}"
-                maxLength="3"
+                name="number"
+                placeholder="Número de tarjeta"
+                autoComplete="cc-number"
+                pattern="[0-9\s]{1, 19}"
+                maxLength="19"
                 onChange={handleCardDetailChange}
-                value={cardDetails.cvv}
+                value={cardDetails.number}
                 required
               />
-            </div>
-            <Input
-              type="text"
-              name="documentNumber"
-              placeholder="Documento del titular"
-              maxLength="8"
-              onChange={handleCardDetailChange}
-              value={cardDetails.documentNumber}
-              required
-            />
+              <Input
+                type="text"
+                name="name"
+                placeholder="Titular de la tarjeta"
+                autoComplete="cc-name"
+                maxLength="50"
+                onChange={handleCardDetailChange}
+                value={cardDetails.name}
+                required
+              />
+              <div className="flex gap-2">
+                <Input
+                  type="text"
+                  name="expiry"
+                  placeholder="MM/AA"
+                  autoComplete="cc-exp"
+                  pattern="(0[1-9]|1[0-2])\/[0-9]{2}"
+                  maxLength="5"
+                  onChange={handleCardDetailChange}
+                  value={cardDetails.expiry}
+                  required
+                />
+                <Input
+                  type="tel"
+                  name="cvv"
+                  placeholder="CVV"
+                  autoComplete="cc-csc"
+                  pattern="[0-9]{3}"
+                  maxLength="3"
+                  onChange={handleCardDetailChange}
+                  value={cardDetails.cvv}
+                  required
+                />
+              </div>
+              <div className='flex items-center gap-x-2'>
+                <Select>
+                  <SelectTrigger className=" w-40">
+                    <SelectValue placeholder="DNI" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="dni">DNI</SelectItem>
+                    <SelectItem value="cedula">Cédula</SelectItem>
+                    <SelectItem value="lc">L.C.</SelectItem>
+                    <SelectItem value="le">L.E.</SelectItem>
+                    <SelectItem value="otro">Otro</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Input
+                  type="text"
+                  name="documentNumber"
+                  placeholder="Documento del titular"
+                  maxLength="8"
+                  onChange={handleCardDetailChange}
+                  value={cardDetails.documentNumber}
+                  required
+                />
+              </div>
+            </>)}
+
           </div>
           <div className='flex items-center mt-2'>
             <p className='text-xs text-gray-600 mr-4'>Procesamos el pago de forma segura con</p>

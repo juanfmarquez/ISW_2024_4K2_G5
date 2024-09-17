@@ -13,7 +13,7 @@ export const shipping_orders = [
     },
     {
         id: 2,
-        status: "confirmada"
+        status: "pendiente"
     },
     {
         id: 3,

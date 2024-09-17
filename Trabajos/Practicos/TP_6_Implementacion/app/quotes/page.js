@@ -1,13 +1,26 @@
 'use client'
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChevronRight, Star } from "lucide-react";
 import { useRouter } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { quotes, paymentMethods } from '../db';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 const QuoteSelectionPayment = () => {
   const router = useRouter();
+  const [isQuoteConfirmed, setIsQuoteConfirmed] = useState(false);
+  const [confirmedQuoteId, setConfirmedQuoteId] = useState(null);
+
+  useEffect(() => {
+    const checkConfirmedQuotes = () => {
+      const confirmedQuote = quotes.find(quote => quote.shippingOrderId === 1 && quote.status === "confirmada");
+      setIsQuoteConfirmed(!!confirmedQuote);
+      setConfirmedQuoteId(confirmedQuote ? confirmedQuote.id : null);
+    };
+
+    checkConfirmedQuotes();
+  }, []);
 
   const getPaymentMethodBadges = (methodIds) => {
     return methodIds.map(id => {
@@ -19,12 +32,17 @@ const QuoteSelectionPayment = () => {
       ) : null;
     });
   };
-
-
-  const handleQuoteSelection = (quote) => {
-    router.push(`/payment?quoteId=${quote.id}`);  
-  }
   
+  const handleQuoteSelection = (quote) => {
+    if (isQuoteConfirmed && quote.id !== confirmedQuoteId) {
+      alert("No es posible aceptar otro presupuesto porque ya hay uno confirmado para este envío.");
+    } else if (quote.id === confirmedQuoteId) {
+      alert("Esta cotización ya está confirmada.");
+    } else {
+      router.push(`/payment?quoteId=${quote.id}`);  
+    }
+  }
+
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -49,6 +67,15 @@ const QuoteSelectionPayment = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold my-4">Elegí un presupuesto</h2>
+      {isQuoteConfirmed && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertTitle>Atención</AlertTitle>
+          <AlertDescription>
+            Ya hay un presupuesto confirmado para este envío. No es posible seleccionar otro.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
         {quotes.map((quote) => (
           <Card
@@ -57,6 +84,11 @@ const QuoteSelectionPayment = () => {
             onClick={() => handleQuoteSelection(quote)}
           >
             <CardHeader>
+            {quote.id === confirmedQuoteId && (
+                <Badge className="mb-2 flex items-center gap-x-1 bg-green-100 text-green-900 shadow-none">
+                  Cotización Confirmada
+                </Badge>
+              )}
               <CardTitle className="flex items-center justify-between">{quote.carrierName}
                 <div className='flex items-center gap-x-1'>
                   <p>$ {Intl.NumberFormat('es-AR').format(quote.cost)} </p>
@@ -65,6 +97,7 @@ const QuoteSelectionPayment = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
+
               <div className='flex items-center mb-2 -mt-2 gap-x-2'>
                 <p className='text-gray-800'>{quote.rating}</p>
                 <Star size={16} />
