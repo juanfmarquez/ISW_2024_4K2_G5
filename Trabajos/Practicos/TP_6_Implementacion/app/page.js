@@ -3,20 +3,22 @@ import { ArrowRight } from 'lucide-react';
 import React from 'react';
 
 const group5 = [
-  { id: '90236', name: 'Martín Boris' },
-  { id: '90618', name: 'Santiago Avendaño' },
-  { id: '90318', name: 'Juan Pedro Roldan' },
-  { id: '89772', name: 'Tomás Malamud' },
-  { id: '89074', name: 'Juan Francisco Márquez' },
-  { id: '86103', name: 'Juan Ignacio Taliani' },
-  { id: '86694', name: 'Eliseo Dávila Pellegrino' },
+  { id: '90236', name: 'Martín Boris', github: 'Mart2202' },
+  { id: '90618', name: 'Santiago Avendaño', github: 'Santi-Avendano' },
+  { id: '90318', name: 'Juan Pedro Roldan', github: 'juanro03'},
+  { id: '89772', name: 'Tomás Malamud', github: 'TomiMalamud' },
+  { id: '89074', name: 'Juan Francisco Márquez', github: 'juanfmarquez' },
+  { id: '86103', name: 'Juan Ignacio Taliani', github: 'JuanIgnacioTaliani'},
+  { id: '86694', name: 'Eliseo Dávila Pellegrino', github: 'eliseodavila' },
 ];
 
-const StudentCard = ({ id, name }) => (
-  <div className="bg-gray-100 rounded-lg p-4 mb-2 shadow-sm">
+const StudentCard = ({ id, name, github }) => (
+  <a href={`https://github.com/${github}`} target='blank'>
+  <div className="bg-gray-100 rounded-lg p-4 mb-2 shadow-sm hover:bg-gray-200/90">
     <span className="font-mono text-gray-600 mr-5">{id}</span>
     <span className="font-normal">{name}</span>
   </div>
+  </a>
 );
 
 const Home = () => {
