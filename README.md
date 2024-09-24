@@ -1,4 +1,4 @@
-22# Grupo 5 - 4k2 - 2024
+# Grupo 5 - 4k2 - 2024
 
 Este repositorio será usado por los integrantes del grupo a lo largo del cursado de la materia Ingeniería y Calidad de Software en el año 2024 para gestionar los ítems a utilizar durante el transcurso del cuatrimestre.
 
@@ -58,11 +58,11 @@ ISW_2024_4K2_G5
 | Cronograma de la asignatura | ISW_Cronograma_2024.xlsx                  | ISW_2024_4K2_G5\Programa\    |
 | Trabajos Prácticos          | TP_<NúmeroDeTP>_<Título>.pdf              | ISW_2024_4K2_G5\Trabajos\Practicos\    |
 | Trabajos Conceptuales       | TC_<NúmeroDeTC>_<Título>.pdf              | ISW_2024_4K2_G5\Trabajos\Conceptuales\    |
-| Templates                   | Template_<NombreDelTema>.[docx/xslx]      | ISW_2024_4K2_G5\Templates\    |
+| Templates                   | Template_\<NombreDelTema>\.[docx/xslx]      | ISW_2024_4K2_G5\Templates\    |
 | Presentaciones              | PPT_U<NúmeroDeUnidad>_<Tema>.pdf          | ISW_2024_4K2_G5\Material Estudio\Presentaciones\    |
 | Resúmenes                   | RES_P<NúmeroDeParcial>.pdf                | ISW_2024_4K2_G5\Material Estudio\Resumenes\    |
-| Bibliografía                | BB_<NombreDelDocumento>.pdf               | ISW_2024_4K2_G5\Material Estudio\Bibliografia\    |
-| Guías                       | guia_[investigacion|resueltos|evaluables].pdf | ISW_2024_4K2_G5\Material Estudio\Guias\ |
+| Bibliografía                | BB_\<NombreDelDocumento>\.pdf               | ISW_2024_4K2_G5\Material Estudio\Bibliografia\    |
+| Guías                       | guia_[investigacion\|resueltos\|evaluables].pdf | ISW_2024_4K2_G5\Material Estudio\Guias\ |
 
 
 
@@ -79,6 +79,7 @@ ISW_2024_4K2_G5
 | **BB** | Bibliografía | 
 | **SCM** | Gestión de Configuración del Software | 
 | **U** | Unidad | 
+| **P** | Parcial | 
 | **<Título>** | Título del Trabajo Conceptual o Práctico | 
 | **<NombreDelTema>** | Nombre asociado al Tema al que corresponde el Template | 
 | **<NúmeroDeUnidad>** | Número de la Unidad correspondiente al Tema del documento o archivo, siguiendo los número establecidos en el Programa de la asignatura. |
