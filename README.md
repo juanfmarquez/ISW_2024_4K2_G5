@@ -1,7 +1,6 @@
-# Grupo 5 - 4k2 - 2024
+22# Grupo 5 - 4k2 - 2024
 
 Este repositorio será usado por los integrantes del grupo a lo largo del cursado de la materia Ingeniería y Calidad de Software en el año 2024 para gestionar los ítems a utilizar durante el transcurso del cuatrimestre.
-
 
 
 
@@ -29,12 +28,12 @@ ISW_2024_4K2_G5
 ├── MaterialEstudio
 │   ├── Bibliografia
 │   │   ├── BB_<NombreDelDocumento>.pdf
-│   ├── Notas de Clase
-│   │   ├── NT_<NúmeroDeSemana>_<Nombre_Apellido>.pdf
+│   ├── Guias
+│   │   ├── guia_[investigacion|resueltos|evaluables].pdf
 │   ├── Presentaciones
 │   │   ├── PPT_U<NúmeroDeUnidad>_<Tema>.pdf
 |   ├── Resumenes
-|   |   ├── RES_U<NúmeroDeUnidad>.pdf
+|   |   ├── RES_P<NúmeroDeParcial>.pdf
 ├── Programa
 │   ├── ISW_Programa_2024.pdf
 │   ├── ISW_Cronograma_2024.xlsx
@@ -53,7 +52,7 @@ ISW_2024_4K2_G5
 
 ## Ítems de Configuración y Reglas de Nombrado
 
-| ítem                        | Regla de Nombrado                         | Ubicación |
+| ítem                        | Regla de Nombrado                           | Ubicación |
 | --------------------------- | ----------------------------------------- | ------------- |
 | Programa de la asignatura   | ISW_Programa_2024.pdf                     | ISW_2024_4K2_G5\Programa\    |
 | Cronograma de la asignatura | ISW_Cronograma_2024.xlsx                  | ISW_2024_4K2_G5\Programa\    |
@@ -61,9 +60,9 @@ ISW_2024_4K2_G5
 | Trabajos Conceptuales       | TC_<NúmeroDeTC>_<Título>.pdf              | ISW_2024_4K2_G5\Trabajos\Conceptuales\    |
 | Templates                   | Template_<NombreDelTema>.[docx/xslx]      | ISW_2024_4K2_G5\Templates\    |
 | Presentaciones              | PPT_U<NúmeroDeUnidad>_<Tema>.pdf          | ISW_2024_4K2_G5\Material Estudio\Presentaciones\    |
-| Resúmenes                   | RES_U<NúmeroDeUnidad>.pdf                 | ISW_2024_4K2_G5\Material Estudio\Resúmenes\    |
-| Bibliografía                | BB_<NombreDelDocumento>.pdf               | ISW_2024_4K2_G5\Material Estudio\Bibliografía\    |
-| Notas de Clase              | NT_<NúmeroDeSemana>_<Nombre_Apellido>.pdf | ISW_2024_4K2_G5\Material Estudio\Notas de Clase\ |
+| Resúmenes                   | RES_P<NúmeroDeParcial>.pdf                | ISW_2024_4K2_G5\Material Estudio\Resumenes\    |
+| Bibliografía                | BB_<NombreDelDocumento>.pdf               | ISW_2024_4K2_G5\Material Estudio\Bibliografia\    |
+| Guías                       | guia_[investigacion|resueltos|evaluables].pdf | ISW_2024_4K2_G5\Material Estudio\Guias\ |
 
 
 
@@ -78,7 +77,6 @@ ISW_2024_4K2_G5
 | **PPT** | Presentaciones | 
 | **RES** | Resúmenes | 
 | **BB** | Bibliografía | 
-| **NT** | Notas de Clase | 
 | **SCM** | Gestión de Configuración del Software | 
 | **U** | Unidad | 
 | **<Título>** | Título del Trabajo Conceptual o Práctico | 
@@ -86,9 +84,6 @@ ISW_2024_4K2_G5
 | **<NúmeroDeUnidad>** | Número de la Unidad correspondiente al Tema del documento o archivo, siguiendo los número establecidos en el Programa de la asignatura. |
 | **<Tema>** | Título del tema al que corresponde una Presentación o Diapositiva. | 
 | **<NombreDelDocumento>** | Título del archivo correspondiente a un libro, paper, o documento de Bibliografía. | 
-| **<NúmeroSemana>** | Número de la semana a la que corresponde un Ítem de Configuración de Notas de Clase, según el Cronograma de la materia en el año 2024. |
-| **<Nombre_Apellido>** | Nombre y apellido del autor de un Ítem de Configuración de Notas de Clase. |
-
 
 
 
