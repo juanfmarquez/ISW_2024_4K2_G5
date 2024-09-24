@@ -81,10 +81,10 @@ ISW_2024_4K2_G5
 | **U** | Unidad | 
 | **P** | Parcial | 
 | **<Título>** | Título del Trabajo Conceptual o Práctico | 
-| **<NombreDelTema>** | Nombre asociado al Tema al que corresponde el Template | 
+| **\<NombreDelTema\a>** | Nombre asociado al Tema al que corresponde el Template | 
 | **<NúmeroDeUnidad>** | Número de la Unidad correspondiente al Tema del documento o archivo, siguiendo los número establecidos en el Programa de la asignatura. |
-| **<Tema>** | Título del tema al que corresponde una Presentación o Diapositiva. | 
-| **<NombreDelDocumento>** | Título del archivo correspondiente a un libro, paper, o documento de Bibliografía. | 
+| **\<Tema\>** | Título del tema al que corresponde una Presentación o Diapositiva. | 
+| **\<NombreDelDocumento\>** | Título del archivo correspondiente a un libro, paper, o documento de Bibliografía. | 
 
 
 
