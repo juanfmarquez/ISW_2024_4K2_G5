@@ -52,17 +52,17 @@ ISW_2024_4K2_G5
 
 ## Ítems de Configuración y Reglas de Nombrado
 
-| ítem                        | Regla de Nombrado                           | Ubicación |
+| Ítem                        | Regla de Nombrado                           | Ubicación |
 | --------------------------- | ----------------------------------------- | ------------- |
-| Programa de la asignatura   | ISW_Programa_2024.pdf                     | ISW_2024_4K2_G5\Programa\    |
-| Cronograma de la asignatura | ISW_Cronograma_2024.xlsx                  | ISW_2024_4K2_G5\Programa\    |
-| Trabajos Prácticos          | TP_<NúmeroDeTP>_<Título>.pdf              | ISW_2024_4K2_G5\Trabajos\Practicos\    |
-| Trabajos Conceptuales       | TC_<NúmeroDeTC>_<Título>.pdf              | ISW_2024_4K2_G5\Trabajos\Conceptuales\    |
-| Templates                   | Template_\<NombreDelTema>\.[docx/xslx]      | ISW_2024_4K2_G5\Templates\    |
-| Presentaciones              | PPT_U<NúmeroDeUnidad>_<Tema>.pdf          | ISW_2024_4K2_G5\Material Estudio\Presentaciones\    |
-| Resúmenes                   | RES_P<NúmeroDeParcial>.pdf                | ISW_2024_4K2_G5\Material Estudio\Resumenes\    |
-| Bibliografía                | BB_\<NombreDelDocumento>\.pdf               | ISW_2024_4K2_G5\Material Estudio\Bibliografia\    |
-| Guías                       | guia_[investigacion\|resueltos\|evaluables].pdf | ISW_2024_4K2_G5\Material Estudio\Guias\ |
+| Bibliografía                | BB_\<NombreDelDocumento>\.pdf               | MaterialEstudio/Bibliografia/    |
+| Guías                       | guia_[investigacion\|resueltos\|evaluables].pdf | MaterialEstudio/Guias/ |
+| Presentaciones              | PPT_U<NúmeroDeUnidad>_<Tema>.pdf          | MaterialEstudio/Presentaciones/    |
+| Resúmenes                   | RES_P<NúmeroDeParcial>.pdf                | MaterialEstudio/Resumenes/    |
+| Programa de la asignatura   | ISW_Programa_2024.pdf                     | Programa/    |
+| Cronograma de la asignatura | ISW_Cronograma_2024.xlsx                  | Programa/    |
+| Templates                   | Template_\<NombreDelTema>\.[docx/xslx]      | Templates/    |
+| Trabajos Conceptuales       | TC_<NúmeroDeTC>_<Título>.pdf              | Trabajos/Conceptuales/    |
+| Trabajos Prácticos          | TP_<NúmeroDeTP>_<Título>.pdf              | Trabajos/Practicos/    |
 
 
 
