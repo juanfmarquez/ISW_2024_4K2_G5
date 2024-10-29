@@ -43,7 +43,7 @@ ISW_2024_4K2_G5
 │   ├── Conceptuales
 │   │   ├── TC_<NúmeroDeTC>_<Título>.pdf
 │   ├── Practicos
-│   │   ├── TP_<NúmeroDeTP>_<Título>.pdf
+│   │   ├── TP_<NúmeroDeTP>_<Título>.[pdf|xlsx]
 
 
 ```
@@ -60,9 +60,9 @@ ISW_2024_4K2_G5
 | Resúmenes                   | RES_P<NúmeroDeParcial>.pdf                | MaterialEstudio/Resumenes/    |
 | Programa de la asignatura   | ISW_Programa_2024.pdf                     | Programa/    |
 | Cronograma de la asignatura | ISW_Cronograma_2024.xlsx                  | Programa/    |
-| Templates                   | Template_\<NombreDelTema>\.[docx/xslx]      | Templates/    |
+| Templates                   | Template_\<NombreDelTema>\.[docx/xlsx]      | Templates/    |
 | Trabajos Conceptuales       | TC_<NúmeroDeTC>_<Título>.pdf              | Trabajos/Conceptuales/    |
-| Trabajos Prácticos          | TP_<NúmeroDeTP>_<Título>.pdf              | Trabajos/Practicos/    |
+| Trabajos Prácticos          | TP_<NúmeroDeTP>_<Título>.[pdf|xlsx]              | Trabajos/Practicos/    |
 
 
 
