@@ -62,7 +62,7 @@ ISW_2024_4K2_G5
 | Cronograma de la asignatura | ISW_Cronograma_2024.xlsx                  | Programa/    |
 | Templates                   | Template_\<NombreDelTema>\.[docx/xlsx]      | Templates/    |
 | Trabajos Conceptuales       | TC_<NúmeroDeTC>_<Título>.pdf              | Trabajos/Conceptuales/    |
-| Trabajos Prácticos          | TP_<NúmeroDeTP>_<Título>.[pdf|xlsx]              | Trabajos/Practicos/    |
+| Trabajos Prácticos          | TP_<NúmeroDeTP>_<Título>.[pdf/xlsx]              | Trabajos/Practicos/    |
 
 
 
