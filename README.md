@@ -90,4 +90,4 @@ ISW_2024_4K2_G5
 
 ## Criterio de establecimiento de Lineas Base
 
-Dentro de nuestro repositorio el criterio para establecer una Línea Base sin contar la primera que será al momento de crear dicho repositorio con los primeros Ítems de Configuración , será al finalizar y aprobar cada Trabajo Práctico o Conceptual.
+Dentro de nuestro repositorio el criterio para establecer una Línea Base será al finalizar y aprobar cada Trabajo Práctico o Conceptual.
